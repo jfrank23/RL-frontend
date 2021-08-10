@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { Player } from "../common/models/Player";
 import PlayerService from "../common/Services/PlayerService";
+import TeamService from "../common/Services/TeamService";
 
 interface exampleInputProps {
   input1: string;
@@ -20,6 +21,7 @@ const Example = ({ input1 }: exampleInputProps) => {
     });
     PlayerService.getAllPlayers().then((players) => setPlayers(players));
     PlayerService.getPlayerById(1).then((player) => setPlayer(player));
+    TeamService.getAllTeams();
     setStateExample(10);
   }, []);
   return (
