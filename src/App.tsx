@@ -3,32 +3,23 @@ import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./Home/HomePage";
 import "./index.css";
+import MaterialMenu from "./Menu/Menu";
 import Players from "./Players/PlayersPage";
 import mainTheme from "./variables/theme";
 
 export default function App() {
   return (
-    <Router>
-      <ThemeProvider theme={mainTheme}>
+    <ThemeProvider theme={mainTheme}>
+      <Router>
         <main>
-          <nav>
-            <ul>
-              <li>
-                <a href="/">Home</a>
-              </li>
-              <li>
-                <a href="/players">Players</a>
-              </li>
-              <li>
-                <a href="/contact">Contact</a>
-              </li>
-            </ul>
-          </nav>
-
-          <Route path="/" exact component={Home} />
-          <Route path="/players" component={Players} />
+          <MaterialMenu>
+            <Route path="/" exact component={Home} />
+            <Route path="/players" component={Players} />
+            <Route path="/games" component={Players} />
+            <Route path="/teams" component={Players} />
+          </MaterialMenu>
         </main>
-      </ThemeProvider>
-    </Router>
+      </Router>
+    </ThemeProvider>
   );
 }
