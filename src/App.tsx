@@ -5,7 +5,7 @@ import Home from "./Home/HomePage";
 import "./index.css";
 import MaterialMenu from "./Menu/Menu";
 import Players from "./Players/PlayersPage";
-import mainTheme from "./variables/theme";
+import mainTheme from "./common/variables/theme";
 
 export default function App() {
   return (
