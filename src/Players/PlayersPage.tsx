@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 
-const Players = () => (
+const PlayersPage = () => (
   <Fragment>
     <h1>Players Page</h1>
   </Fragment>
 );
 
-export default Players
+export default PlayersPage
