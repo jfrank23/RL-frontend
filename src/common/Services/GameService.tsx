@@ -21,12 +21,12 @@ export default class GameService {
 
     await RankService.createRank({
       gameId: createdGameId,
-      rank: 0, //TODO update
+      rank: 1200, //TODO update
       teamId: blueTeamId,
     });
     await RankService.createRank({
       gameId: createdGameId,
-      rank: 0, //TODO Update
+      rank: 1200, //TODO Update
       teamId: redTeamId,
     });
     for (let stat of game.stats) {
