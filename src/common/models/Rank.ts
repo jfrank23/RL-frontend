@@ -1,5 +1,5 @@
 export interface Rank {
-  id: number;
+  id?: number;
   gameId: number;
   teamId: number;
   rank: number;

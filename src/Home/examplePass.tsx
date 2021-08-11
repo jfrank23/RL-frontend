@@ -14,11 +14,6 @@ const Example = ({ input1 }: exampleInputProps) => {
   const [player, setPlayer] = useState<Player>();
 
   useEffect(() => {
-    PlayerService.updatePlayer({
-      id: 1,
-      firstName: "Jordan",
-      lastName: "Franklin",
-    });
     PlayerService.getAllPlayers().then((players) => setPlayers(players));
     PlayerService.getPlayerById(1).then((player) => setPlayer(player));
     TeamService.getAllTeams();

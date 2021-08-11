@@ -6,4 +6,4 @@ const PlayersPage = () => (
   </Fragment>
 );
 
-export default PlayersPage
+export default PlayersPage;
