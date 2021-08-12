@@ -5,6 +5,10 @@ import Home from "./Home/HomePage";
 import "./index.css";
 import MaterialMenu from "./Menu/Menu";
 import Players from "./Players/PlayersPage";
+import Teams from "./Teams/TeamsPage";
+import Games from "./Games/GamesPage";
+import GameEntry from "./Games/GameEntry";
+import PlayerEntry from "./Players/PlayerEntry";
 import mainTheme from "./common/variables/theme";
 
 export default function App() {
@@ -15,8 +19,10 @@ export default function App() {
           <MaterialMenu>
             <Route path="/" exact component={Home} />
             <Route path="/players" component={Players} />
-            <Route path="/games" component={Players} />
-            <Route path="/teams" component={Players} />
+            <Route path="/games" component={Games} />
+            <Route path="/teams" component={Teams} />
+            <Route path="/game_entry" component={GameEntry} />
+            <Route path="/player_entry" component={PlayerEntry} />
           </MaterialMenu>
         </main>
       </Router>
