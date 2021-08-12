@@ -4,11 +4,13 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./Home/HomePage";
 import "./index.css";
 import MaterialMenu from "./Menu/Menu";
+
 import Players from "./Players/PlayersPage";
 import Teams from "./Teams/TeamsPage";
 import Games from "./Games/GamesPage";
 import GameEntry from "./Games/GameEntry";
 import PlayerEntry from "./Players/PlayerEntry";
+
 import mainTheme from "./common/variables/theme";
 
 export default function App() {
