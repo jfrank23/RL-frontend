@@ -14,7 +14,7 @@ import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { Home, People, Person, SportsEsports } from "@material-ui/icons";
+import { Home, People, Person, SportsEsports, PersonAdd, AddBox } from "@material-ui/icons";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
 import clsx from "clsx";
@@ -86,6 +86,24 @@ const MaterialMenu = ({ children }: MaterialMenuProps) => {
             </ListItemIcon>
             <ListItemText
               primary={"Teams"}
+              className={clsx(classes.whiteText)}
+            ></ListItemText>
+          </ListItem>
+          <ListItem key={5} button component={Link} to="/player_entry">
+            <ListItemIcon>
+              <PersonAdd className={classes.whiteText} fontSize="large" />
+            </ListItemIcon>
+            <ListItemText
+              primary={"Add New Player"}
+              className={clsx(classes.whiteText)}
+            ></ListItemText>
+          </ListItem>
+          <ListItem key={6} button component={Link} to="/game_entry">
+            <ListItemIcon>
+              <AddBox className={classes.whiteText} fontSize="large" />
+            </ListItemIcon>
+            <ListItemText
+              primary={"Add New Game"}
               className={clsx(classes.whiteText)}
             ></ListItemText>
           </ListItem>
