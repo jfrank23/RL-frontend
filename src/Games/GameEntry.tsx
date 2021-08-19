@@ -150,7 +150,9 @@ const GameEntry = () => {
 
   return (
     <div>
-      <h1>Game Entry Page</h1>
+      <Typography variant="h3" className={classes.pageName}>
+        Game Entry Page
+      </Typography>
       <Paper className={classes.paper}>
         <div>
           <Typography className={classes.sectionHeading} variant="h4">
