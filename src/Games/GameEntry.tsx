@@ -15,6 +15,7 @@ import {
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Game } from "../common/models/Game";
 import { Player } from "../common/models/Player";
 import { Stat } from "../common/models/Stat";
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     playerSpacing: {
       margin: "1rem 0rem",
+      display: "flex",
     },
     scoreInput: {
       width: "20ch",
@@ -58,6 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const range = [[], [0], [0, 1], [0, 1, 2], [0, 1, 2, 3]];
 const GameEntry = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [selectedDate, handleDateChange] = useState<Date | null>(new Date());
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
   const [gameType, setGameType] = useState(1);
@@ -123,6 +126,7 @@ const GameEntry = () => {
       stats: statsInGame,
     };
     await GameService.createGame(game);
+    return history.push("/games");
   };
 
   return (
@@ -228,60 +232,68 @@ const GameEntry = () => {
                     })}
                   </Select>
                 </FormControl>
-                <TextField
-                  id="outlined-number"
-                  label="Goals"
-                  type="number"
-                  value={statsInGame[index]?.goals || 0}
-                  onChange={(input) => handleStatUpdate(input, "goals", index)}
-                  className={classes.statInput}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  InputProps={{ inputProps: { max: 100, min: 0 } }}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.statInput}
-                  id="outlined-number"
-                  label="Assists"
-                  type="number"
-                  value={statsInGame[index]?.assists || 0}
-                  onChange={(input) =>
-                    handleStatUpdate(input, "assists", index)
-                  }
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  InputProps={{ inputProps: { max: 100, min: 0 } }}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.statInput}
-                  id="outlined-number"
-                  label="Saves"
-                  type="number"
-                  value={statsInGame[index]?.saves || 0}
-                  onChange={(input) => handleStatUpdate(input, "saves", index)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  InputProps={{ inputProps: { max: 100, min: 0 } }}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.statInput}
-                  id="outlined-number"
-                  label="Shots"
-                  onChange={(input) => handleStatUpdate(input, "shots", index)}
-                  type="number"
-                  value={statsInGame[index]?.shots || 0}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  InputProps={{ inputProps: { max: 100, min: 0 } }}
-                  variant="outlined"
-                />
+                <div hidden={!playersInGame[index]}>
+                  <TextField
+                    id="outlined-number"
+                    label="Goals"
+                    type="number"
+                    value={statsInGame[index]?.goals || 0}
+                    onChange={(input) =>
+                      handleStatUpdate(input, "goals", index)
+                    }
+                    className={classes.statInput}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{ inputProps: { max: 100, min: 0 } }}
+                    variant="outlined"
+                  />
+                  <TextField
+                    className={classes.statInput}
+                    id="outlined-number"
+                    label="Assists"
+                    type="number"
+                    value={statsInGame[index]?.assists || 0}
+                    onChange={(input) =>
+                      handleStatUpdate(input, "assists", index)
+                    }
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{ inputProps: { max: 100, min: 0 } }}
+                    variant="outlined"
+                  />
+                  <TextField
+                    className={classes.statInput}
+                    id="outlined-number"
+                    label="Saves"
+                    type="number"
+                    value={statsInGame[index]?.saves || 0}
+                    onChange={(input) =>
+                      handleStatUpdate(input, "saves", index)
+                    }
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{ inputProps: { max: 100, min: 0 } }}
+                    variant="outlined"
+                  />
+                  <TextField
+                    className={classes.statInput}
+                    id="outlined-number"
+                    label="Shots"
+                    onChange={(input) =>
+                      handleStatUpdate(input, "shots", index)
+                    }
+                    type="number"
+                    value={statsInGame[index]?.shots || 0}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{ inputProps: { max: 100, min: 0 } }}
+                    variant="outlined"
+                  />
+                </div>
               </div>
             );
           })}
@@ -322,66 +334,68 @@ const GameEntry = () => {
                     })}
                   </Select>
                 </FormControl>
-                <TextField
-                  id="outlined-number"
-                  label="Goals"
-                  type="number"
-                  value={statsInGame[trueIndex]?.goals || 0}
-                  onChange={(input) =>
-                    handleStatUpdate(input, "goals", trueIndex)
-                  }
-                  className={classes.statInput}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  InputProps={{ inputProps: { max: 100, min: 0 } }}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.statInput}
-                  id="outlined-number"
-                  label="Assists"
-                  type="number"
-                  value={statsInGame[trueIndex]?.assists || 0}
-                  onChange={(input) =>
-                    handleStatUpdate(input, "assists", trueIndex)
-                  }
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  InputProps={{ inputProps: { max: 100, min: 0 } }}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.statInput}
-                  id="outlined-number"
-                  label="Saves"
-                  type="number"
-                  value={statsInGame[trueIndex]?.saves || 0}
-                  onChange={(input) =>
-                    handleStatUpdate(input, "saves", trueIndex)
-                  }
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  InputProps={{ inputProps: { max: 100, min: 0 } }}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.statInput}
-                  id="outlined-number"
-                  label="Shots"
-                  onChange={(input) =>
-                    handleStatUpdate(input, "shots", trueIndex)
-                  }
-                  type="number"
-                  value={statsInGame[trueIndex]?.shots || 0}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  InputProps={{ inputProps: { max: 100, min: 0 } }}
-                  variant="outlined"
-                />
+                <div hidden={!playersInGame[trueIndex]}>
+                  <TextField
+                    id="outlined-number"
+                    label="Goals"
+                    type="number"
+                    value={statsInGame[trueIndex]?.goals || 0}
+                    onChange={(input) =>
+                      handleStatUpdate(input, "goals", trueIndex)
+                    }
+                    className={classes.statInput}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{ inputProps: { max: 100, min: 0 } }}
+                    variant="outlined"
+                  />
+                  <TextField
+                    className={classes.statInput}
+                    id="outlined-number"
+                    label="Assists"
+                    type="number"
+                    value={statsInGame[trueIndex]?.assists || 0}
+                    onChange={(input) =>
+                      handleStatUpdate(input, "assists", trueIndex)
+                    }
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{ inputProps: { max: 100, min: 0 } }}
+                    variant="outlined"
+                  />
+                  <TextField
+                    className={classes.statInput}
+                    id="outlined-number"
+                    label="Saves"
+                    type="number"
+                    value={statsInGame[trueIndex]?.saves || 0}
+                    onChange={(input) =>
+                      handleStatUpdate(input, "saves", trueIndex)
+                    }
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{ inputProps: { max: 100, min: 0 } }}
+                    variant="outlined"
+                  />
+                  <TextField
+                    className={classes.statInput}
+                    id="outlined-number"
+                    label="Shots"
+                    onChange={(input) =>
+                      handleStatUpdate(input, "shots", trueIndex)
+                    }
+                    type="number"
+                    value={statsInGame[trueIndex]?.shots || 0}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{ inputProps: { max: 100, min: 0 } }}
+                    variant="outlined"
+                  />
+                </div>
               </div>
             );
           })}
