@@ -41,5 +41,8 @@ export const gameEntryStyles = makeStyles((theme: Theme) =>
     sectionHeading: {
       marginBottom: theme.spacing(4),
     },
+    pageName: {
+      marginLeft: "5rem",
+    },
   })
 );
