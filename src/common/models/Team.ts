@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 
 export interface Team {
-  id: number;
+  id?: number;
   team: Player[];
 }
