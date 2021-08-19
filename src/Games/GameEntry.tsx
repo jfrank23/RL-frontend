@@ -75,6 +75,57 @@ const GameEntry = () => {
     });
   }, []);
 
+  const arePlayersValid = () => {
+    if (playersInGame.length !== 2 * gameType) {
+      return false;
+    }
+    for (let player of playersInGame) {
+      if (!player) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const areScoresAndStatsValid = () => {
+    if (blueScore + redScore === 0) {
+      return false;
+    }
+    if (statsInGame.length !== 2 * gameType) {
+      return false;
+    }
+    for (let stat of statsInGame) {
+      if (!stat) {
+        return false;
+      }
+    }
+    let calcScoreBlue = 0;
+    let calcAssistsBlue = 0;
+    for (let stat of statsInGame.slice(0, gameType)) {
+      calcScoreBlue += stat.goals;
+      calcAssistsBlue += stat.assists;
+    }
+    if (calcScoreBlue !== blueScore || calcAssistsBlue > blueScore) {
+      return false;
+    }
+
+    let calcScoreOrange = 0;
+    let calcAssistsOrange = 0;
+    for (let stat of statsInGame.slice(gameType)) {
+      calcScoreOrange += stat.goals;
+      calcAssistsOrange += stat.assists;
+    }
+    if (calcScoreOrange !== redScore || calcAssistsOrange > redScore) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const isButtonDisabled = () => {
+    return !arePlayersValid() || !areScoresAndStatsValid();
+  };
+
   const handleGameType = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
   ) => {
@@ -401,7 +452,12 @@ const GameEntry = () => {
           })}
         </div>
         <Divider className={classes.divider} />
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
+        <Button
+          disabled={isButtonDisabled()}
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+        >
           Submit
         </Button>
       </Paper>
