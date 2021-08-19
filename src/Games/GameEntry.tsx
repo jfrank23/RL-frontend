@@ -1,15 +1,12 @@
 import DateFnsUtils from "@date-io/date-fns";
 import {
   Button,
-  createStyles,
   Divider,
   FormControl,
   InputLabel,
-  makeStyles,
   Paper,
   Select,
   TextField,
-  Theme,
   Typography,
 } from "@material-ui/core";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -21,45 +18,10 @@ import { Player } from "../common/models/Player";
 import { Stat } from "../common/models/Stat";
 import GameService from "../common/Services/GameService";
 import PlayerService from "../common/Services/PlayerService";
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      display: "flex",
-      flexWrap: "wrap",
-    },
-    textField: {
-      width: 200,
-    },
-    paper: {
-      marginLeft: "5rem",
-      marginRight: "5rem",
-      padding: "5rem",
-    },
-    divider: {
-      margin: "3rem 0rem",
-    },
-    playerInput: {
-      width: "25ch",
-    },
-    statInput: {
-      width: "10ch",
-      marginLeft: theme.spacing(1),
-    },
-    playerSpacing: {
-      margin: "1rem 0rem",
-      display: "flex",
-    },
-    scoreInput: {
-      width: "20ch",
-    },
-    scoreSpacing: {
-      marginLeft: theme.spacing(4),
-    },
-  })
-);
+import { gameEntryStyles } from "./gameEntryStyles";
 const range = [[], [0], [0, 1], [0, 1, 2], [0, 1, 2, 3]];
 const GameEntry = () => {
-  const classes = useStyles();
+  const classes = gameEntryStyles();
   const history = useHistory();
   const [selectedDate, handleDateChange] = useState<Date | null>(new Date());
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
@@ -68,6 +30,7 @@ const GameEntry = () => {
   const [statsInGame, setStatsInGame] = useState<Stat[]>([]);
   const [blueScore, setBlueScore] = useState(0);
   const [redScore, setRedScore] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     PlayerService.getAllPlayers().then((players) => {
@@ -118,12 +81,17 @@ const GameEntry = () => {
     if (calcScoreOrange !== redScore || calcAssistsOrange > redScore) {
       return false;
     }
-
     return true;
   };
 
   const isButtonDisabled = () => {
-    return !arePlayersValid() || !areScoresAndStatsValid();
+    if (!arePlayersValid()) {
+      return true;
+    }
+    if (!areScoresAndStatsValid()) {
+      return true;
+    }
+    return false;
   };
 
   const handleGameType = (
@@ -185,6 +153,9 @@ const GameEntry = () => {
       <h1>Game Entry Page</h1>
       <Paper className={classes.paper}>
         <div>
+          <Typography className={classes.sectionHeading} variant="h4">
+            Score
+          </Typography>
           <div>
             <TextField
               id="outlined-number"
@@ -216,6 +187,8 @@ const GameEntry = () => {
           <div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DateTimePicker
+                disabled={true}
+                className={classes.gameTimeSpacing}
                 inputVariant="outlined"
                 label="Game Time"
                 value={selectedDate}
@@ -227,7 +200,10 @@ const GameEntry = () => {
           <Divider className={classes.divider} />
         </div>
         <div>
-          <FormControl variant="outlined" className={classes.textField}>
+          <Typography className={classes.sectionHeading} variant="h4">
+            Teams
+          </Typography>
+          <FormControl variant="outlined" className={classes.gameTypeInput}>
             <InputLabel htmlFor="outlined-age-native-simple">
               Team Type
             </InputLabel>
@@ -249,7 +225,7 @@ const GameEntry = () => {
           </FormControl>
         </div>
         <div>
-          <Typography>Blue Team</Typography>
+          <Typography variant="h6">Blue Team</Typography>
           {range[gameType].map((index) => {
             return (
               <div className={classes.playerSpacing}>
@@ -350,7 +326,7 @@ const GameEntry = () => {
           })}
         </div>
         <div>
-          <Typography>Orange Team</Typography>
+          <Typography variant="h6">Orange Team</Typography>
           {range[gameType].map((index) => {
             const trueIndex = index + gameType;
             return (
@@ -452,6 +428,18 @@ const GameEntry = () => {
           })}
         </div>
         <Divider className={classes.divider} />
+        <div>
+          <Typography color="error" hidden={arePlayersValid()}>
+            Please ensure all players are selected and not empty.
+          </Typography>
+          <Typography
+            color="error"
+            hidden={!arePlayersValid() || areScoresAndStatsValid()}
+          >
+            Please stats add up to the score. Goals must equal the team's score.
+            Assists must be less than the team's score.
+          </Typography>
+        </div>
         <Button
           disabled={isButtonDisabled()}
           variant="contained"
