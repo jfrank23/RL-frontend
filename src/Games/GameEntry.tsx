@@ -30,7 +30,6 @@ const GameEntry = () => {
   const [statsInGame, setStatsInGame] = useState<Stat[]>([]);
   const [blueScore, setBlueScore] = useState(0);
   const [redScore, setRedScore] = useState(0);
-  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     PlayerService.getAllPlayers().then((players) => {
