@@ -22,7 +22,7 @@ export default function App() {
           <MaterialMenu>
             <Route path="/" exact component={Home} />
             <Route path="/players" component={Players} />
-            <Route path="/playerSpecific" component={PlayerSpecific} />
+            <Route path="/playerSpecific/:id" component={PlayerSpecific} />
             <Route path="/games" component={Games} />
             <Route path="/teams" component={Teams} />
             <Route path="/game_entry" component={GameEntry} />

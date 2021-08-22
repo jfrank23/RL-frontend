@@ -114,15 +114,6 @@ const MaterialMenu = ({ children }: MaterialMenuProps) => {
               className={clsx(classes.whiteText)}
             ></ListItemText>
           </ListItem>
-          <ListItem key={7} button component={Link} to="/playerSpecific">
-            <ListItemIcon>
-              <Person className={classes.whiteText} fontSize="large" />
-            </ListItemIcon>
-            <ListItemText
-              primary={"Player Specific"}
-              className={clsx(classes.whiteText)}
-            ></ListItemText>
-          </ListItem>
         </List>
       </>
     );
