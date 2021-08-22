@@ -1,17 +1,26 @@
+export interface TotalSummary {
+  goals: number;
+  assists: number;
+  points: number;
+  gamesPlayed: number;
+  saves: number;
+  shots: number;
+}
+
+export interface AverageSummary {
+  goals: number;
+  assists: number;
+  points: number;
+  saves: number;
+  shots: number;
+}
+
 export interface StatSummary {
-  total: {
-    goals: number;
-    assists: number;
-    points: number;
-    gamesPlayed: number;
-    saves: number;
-    shots: number;
-  };
-  average: {
-    goals: number;
-    assists: number;
-    points: number;
-    saves: number;
-    shots: number;
-  };
+  total: TotalSummary;
+  average: AverageSummary;
+}
+
+export interface OfficeRanking {
+  id: number;
+  summary: StatSummary;
 }
