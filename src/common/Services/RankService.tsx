@@ -55,7 +55,7 @@ export default class RankService {
       newBlueRank = mostRecentRankBlue + k * (0 - expectedScoreBlue);
       newOrangeRank = mostRecentRankOrange + k * (1 - expectedScoreOrange);
     }
-    return [newBlueRank, newOrangeRank];
+    return [Math.round(newBlueRank), Math.round(newOrangeRank)];
   }
 }
 
