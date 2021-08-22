@@ -19,14 +19,21 @@ export default class GameService {
     let response = await axios.post(`${backendUrl}/games`, gameApiObject);
     let createdGameId = response.data[0].game_id;
 
+    const newRanks = await RankService.generateNewRank(
+      blueTeamId,
+      redTeamId,
+      game.blueScore,
+      game.redScore
+    );
+
     await RankService.createRank({
       gameId: createdGameId,
-      rank: 1200, //TODO update
+      rank: newRanks[0],
       teamId: blueTeamId,
     });
     await RankService.createRank({
       gameId: createdGameId,
-      rank: 1200, //TODO Update
+      rank: newRanks[1],
       teamId: redTeamId,
     });
     for (let stat of game.stats) {
@@ -40,4 +47,33 @@ export default class GameService {
       }
     }
   }
+
+  static async getAllGames(): Promise<Game[]> {
+    let dbGames = (await axios.get(`${backendUrl}/games`)).data;
+
+    const mapped = dbGames.map(async (dbGame: dbGame) => {
+      let blueTeam = await TeamService.getTeamById(dbGame.blue_team);
+      let orangeTeam = await TeamService.getTeamById(dbGame.red_team);
+      let stats = await StatService.getStatsByGame(dbGame.game_id);
+      return {
+        blueScore: dbGame.blue_score,
+        redScore: dbGame.red_score,
+        gameTime: dbGame.game_time,
+        id: dbGame.game_id,
+        blueTeam: blueTeam,
+        redTeam: orangeTeam,
+        stats: stats,
+      } as Game;
+    });
+    const finalData = await Promise.all<Game>(mapped);
+    return finalData;
+  }
+}
+interface dbGame {
+  blue_team: number;
+  red_team: number;
+  game_id: number;
+  blue_score: number;
+  red_score: number;
+  game_time: Date;
 }
