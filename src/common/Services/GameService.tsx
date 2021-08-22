@@ -68,7 +68,41 @@ export default class GameService {
     const finalData = await Promise.all<Game>(mapped);
     return finalData;
   }
+
+  static async getGamesByTeam(teamId: number): Promise<Game[]> {
+    let dbGames = (await axios.get(`${backendUrl}/games/team/${teamId}`)).data;
+
+    const mapped = dbGames.map(async (dbGame: dbGame) => {
+      let blueTeam = await TeamService.getTeamById(dbGame.blue_team);
+      let orangeTeam = await TeamService.getTeamById(dbGame.red_team);
+      let stats = await StatService.getStatsByGame(dbGame.game_id);
+      return {
+        blueScore: dbGame.blue_score,
+        redScore: dbGame.red_score,
+        gameTime: dbGame.game_time,
+        id: dbGame.game_id,
+        blueTeam: blueTeam,
+        redTeam: orangeTeam,
+        stats: stats,
+      } as Game;
+    });
+    const finalData = await Promise.all<Game>(mapped);
+    return finalData;
+  }
+
+  static async getGamesByPlayerId(playerId: number): Promise<Game[]> {
+    const teams = await TeamService.getTeamsByPlayerId(playerId);
+    let games: Game[] = [];
+    for (let team of teams) {
+      if (team.id) {
+        const gamesForTeam = await GameService.getGamesByTeam(team.id);
+        games = games.concat(gamesForTeam);
+      }
+    }
+    return games;
+  }
 }
+
 interface dbGame {
   blue_team: number;
   red_team: number;
