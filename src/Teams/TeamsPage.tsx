@@ -3,19 +3,23 @@ import React from "react";
 import { Button } from "@material-ui/core";
 import { useEffect, useState } from "react";
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TablePagination from '@material-ui/core/TablePagination';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
-import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import './TeamsPage.css'
-
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TablePagination from "@material-ui/core/TablePagination";
+import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import SearchIcon from "@material-ui/icons/Search";
+import {
+  withStyles,
+  Theme,
+  createStyles,
+  makeStyles,
+} from "@material-ui/core/styles";
+import "./TeamsPage.css";
 
 import { Rank } from "../common/models/Rank";
 import { Player } from "../common/models/Player";
@@ -24,12 +28,13 @@ import { Game } from "../common/models/Game";
 import { Stat } from "../common/models/Stat";
 import PlayerService from "../common/Services/PlayerService";
 import TeamService from "../common/Services/TeamService";
+import { useHistory } from "react-router-dom";
 
 //---------CSS--------------
 const useRowStyles = makeStyles({
   root: {
-    '& > *': {
-      borderBottom: 'set',
+    "& > *": {
+      borderBottom: "set",
     },
   },
 });
@@ -46,21 +51,21 @@ const StyledHeader = withStyles((theme: Theme) =>
 //---------------Data--------------------------
 
 const ranks: Rank[] = [
-  {id: 1234, rank: 1100, teamId: 123, gameId: 956511},
-  {id: 512, rank: 218, teamId: 678, gameId: 981235},
-  {id: 542, rank: 435, teamId: 791, gameId: 981123},
-  {id: 712, rank: 932, teamId: 912, gameId: 985121},
-  {id: 823, rank: 521, teamId: 821, gameId: 981512},
-  {id: 2461, rank: 246, teamId: 8211, gameId: 981510},
-  {id: 4681, rank: 468, teamId: 8212, gameId: 981511},
-  {id: 4671, rank: 467, teamId: 8213, gameId: 981513},
-  {id: 9861, rank: 986, teamId: 8214, gameId: 981514},
-  {id: 5171, rank: 517, teamId: 8215, gameId: 981515},
-  {id: 8182, rank: 812, teamId: 8216, gameId: 981516},
-  {id: 6811, rank: 681, teamId: 8217, gameId: 981517},
-  {id: 8721, rank: 872, teamId: 8218, gameId: 981518},
-  {id: 5871, rank: 587, teamId: 8219, gameId: 981519},
-  {id: 7131, rank: 713, teamId: 8220, gameId: 981531},
+  { id: 1234, rank: 1100, teamId: 123, gameId: 956511 },
+  { id: 512, rank: 218, teamId: 678, gameId: 981235 },
+  { id: 542, rank: 435, teamId: 791, gameId: 981123 },
+  { id: 712, rank: 932, teamId: 912, gameId: 985121 },
+  { id: 823, rank: 521, teamId: 821, gameId: 981512 },
+  { id: 2461, rank: 246, teamId: 8211, gameId: 981510 },
+  { id: 4681, rank: 468, teamId: 8212, gameId: 981511 },
+  { id: 4671, rank: 467, teamId: 8213, gameId: 981513 },
+  { id: 9861, rank: 986, teamId: 8214, gameId: 981514 },
+  { id: 5171, rank: 517, teamId: 8215, gameId: 981515 },
+  { id: 8182, rank: 812, teamId: 8216, gameId: 981516 },
+  { id: 6811, rank: 681, teamId: 8217, gameId: 981517 },
+  { id: 8721, rank: 872, teamId: 8218, gameId: 981518 },
+  { id: 5871, rank: 587, teamId: 8219, gameId: 981519 },
+  { id: 7131, rank: 713, teamId: 8220, gameId: 981531 },
 ];
 
 const players: Player[] = [
@@ -91,7 +96,7 @@ const game1: Stat[] = [
   { playerId: 45672, goals: 3, assists: 4, saves: 5, shots: 10 },
 ];
 
-const currentTime : Date = new Date();
+const currentTime: Date = new Date();
 
 const games: Game[] = [
   {
@@ -169,11 +174,14 @@ function Row(props: { row: any }) {
 const Teams = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, ranks.length - page * rowsPerPage);
-  const handleChangePage = (event:any, newPage:any) => {
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, ranks.length - page * rowsPerPage);
+  const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -203,9 +211,12 @@ const Teams = () => {
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-             ? ranks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) 
-             : ranks)
-             .map((rankTeam:any) => (
+              ? ranks.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+              : ranks
+            ).map((rankTeam: any) => (
               <Row key={rankTeam.rank} row={rankTeam} />
             ))}
             {emptyRows > 0 && (
