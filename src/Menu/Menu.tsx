@@ -14,7 +14,14 @@ import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { Home, People, Person, SportsEsports, PersonAdd, AddBox } from "@material-ui/icons";
+import {
+  Home,
+  People,
+  Person,
+  SportsEsports,
+  PersonAdd,
+  AddBox,
+} from "@material-ui/icons";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
 import clsx from "clsx";

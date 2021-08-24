@@ -14,13 +14,13 @@ const Example = ({ input1 }: exampleInputProps) => {
   const [stateExample, setStateExample] = useState(3);
   const [players, setPlayers] = useState<Player[]>([]);
   const [player, setPlayer] = useState<Player>();
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<Game>();
 
   useEffect(() => {
     PlayerService.getAllPlayers().then((players) => setPlayers(players));
     PlayerService.getPlayerById(1).then((player) => setPlayer(player));
     TeamService.getAllTeams();
-    GameService.getAllGames().then((games) => setGames(games));
+    GameService.getGamesById(18).then((games) => setGames(games));
     setStateExample(10);
   }, []);
   return (
