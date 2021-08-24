@@ -41,6 +41,51 @@ export default class TeamService {
     return foundTeam;
   }
 
+  static async getTeamById(teamId: number): Promise<Team> {
+    let dbTeam = (await axios.get(`${backendUrl}/teams/${teamId}`)).data;
+    let id = dbTeam.team_id;
+    let playersOnTeam: Player[] = [];
+    for (let playerId of [
+      dbTeam.player1,
+      dbTeam.player2,
+      dbTeam.player3,
+      dbTeam.player4,
+    ]) {
+      if (playerId) {
+        let matchedPlayer = await PlayerService.getPlayerById(playerId);
+        if (matchedPlayer) {
+          playersOnTeam.push(matchedPlayer);
+        }
+      }
+    }
+    return { id: id, team: playersOnTeam };
+  }
+
+  static async getTeamsByPlayerId(singlePlayerId: number): Promise<Team[]> {
+    let dbTeams = (await axios.get(`${backendUrl}/teams/${singlePlayerId}`))
+      .data;
+    let teams: Team[] = [];
+    for (let dbTeam of dbTeams) {
+      let id = dbTeam.team_id;
+      let playersOnTeam: Player[] = [];
+      for (let playerId of [
+        dbTeam.player1,
+        dbTeam.player2,
+        dbTeam.player3,
+        dbTeam.player4,
+      ]) {
+        if (playerId) {
+          let matchedPlayer = await PlayerService.getPlayerById(playerId);
+          if (matchedPlayer) {
+            playersOnTeam.push(matchedPlayer);
+          }
+        }
+      }
+      teams.push({ id: id, team: playersOnTeam });
+    }
+    return teams;
+  }
+
   static async addTeam(players: Player[]) {
     let existingTeam = await this.getTeamByPlayers(players);
     if (!existingTeam) {
@@ -48,7 +93,6 @@ export default class TeamService {
       let response = await axios.post(`${backendUrl}/teams`, listOfIds);
       return response.data[0].team_id;
     } else {
-      console.log("Existing Team");
       return existingTeam.id;
     }
   }

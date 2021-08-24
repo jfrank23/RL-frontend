@@ -1,6 +1,8 @@
 import { Button } from "@material-ui/core";
 import { useEffect, useState } from "react";
+import { Game } from "../common/models/Game";
 import { Player } from "../common/models/Player";
+import GameService from "../common/Services/GameService";
 import PlayerService from "../common/Services/PlayerService";
 import TeamService from "../common/Services/TeamService";
 
@@ -12,11 +14,13 @@ const Example = ({ input1 }: exampleInputProps) => {
   const [stateExample, setStateExample] = useState(3);
   const [players, setPlayers] = useState<Player[]>([]);
   const [player, setPlayer] = useState<Player>();
+  const [games, setGames] = useState<Game[]>([]);
 
   useEffect(() => {
     PlayerService.getAllPlayers().then((players) => setPlayers(players));
     PlayerService.getPlayerById(1).then((player) => setPlayer(player));
     TeamService.getAllTeams();
+    GameService.getAllGames().then((games) => setGames(games));
     setStateExample(10);
   }, []);
   return (
