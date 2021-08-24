@@ -5,6 +5,8 @@ export interface TotalSummary {
   gamesPlayed: number;
   saves: number;
   shots: number;
+  wins: number;
+  losses: number;
 }
 
 export interface AverageSummary {
