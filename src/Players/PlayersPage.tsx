@@ -39,13 +39,13 @@ const useStyles = makeStyles((theme:Theme) => ({
 
 const PlayersPage = () => {
   const classes = useStyles();
-  const [pageSize, setPageSize] = React.useState<number>(5);
+  const [pageSize, setPageSize] = React.useState<number>(10);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
   useEffect(() => {
     PlayerService.getAllPlayers().then((players) => {
       setAllPlayers(players);
     });
-  }, []);
+  }, [allPlayers]);
 
   const detailButton = (params:any) => {
     return (
