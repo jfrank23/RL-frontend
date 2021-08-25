@@ -1,7 +1,6 @@
 import {
   AverageSummary,
   OfficeRanking,
-  StatSummary,
   TotalSummary,
 } from "../models/StatSummary";
 import GameService from "./GameService";
