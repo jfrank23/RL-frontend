@@ -8,7 +8,7 @@ export default class StatSummaryService {
     games: Game[],
     playerOrTeamId: number
   ): StatSummary {
-    const numberOfGames = stats.length;
+    const numberOfGames = games.length;
     const winsAndLosses = getWinsAndLosses(games, playerOrTeamId);
 
     let statSummary: StatSummary = {
