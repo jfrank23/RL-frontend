@@ -1,6 +1,6 @@
 //import { DataGrid, GridRowsProp, GridColDef } from '@material-ui/data-grid';
 import React from "react";
-import { Button } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 
 import Table from "@material-ui/core/Table";
@@ -44,6 +44,19 @@ const StyledHeader = withStyles((theme: Theme) =>
     head: {
       backgroundColor: theme.palette.success.dark,
       color: theme.palette.common.white,
+      borderRight: `1px solid ${
+        theme.palette.type === 'light' ? '#f0f0f0' : '#303030'
+      }`,
+    },
+  })
+)(TableCell);
+
+const StyledCell = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      borderRight: `1px solid ${
+        theme.palette.type === 'light' ? '#f0f0f0' : '#303030'
+      }`,
     },
   })
 )(TableCell);
@@ -145,18 +158,18 @@ function Row(props: { row: any }) {
   return (
     <React.Fragment>
       <TableRow hover key={row.teamId} className={classes.root}>
-        <TableCell align="center" component="th" scope="row">
+        <StyledCell align="center" component="th" scope="row">
           {row.rank}
-        </TableCell>
-        <TableCell align="center">
+        </StyledCell>
+        <StyledCell align="center">
           {teams.map(
             (teamRow) => teamRow.id === row.teamId && TeamPlayers(teamRow)
           )}
-        </TableCell>
-        <TableCell align="center">
+        </StyledCell>
+        <StyledCell align="center">
           {currentTime.getDate()}-{currentTime.getMonth() + 1}-
           {currentTime.getFullYear()}
-        </TableCell>
+        </StyledCell>
         <TableCell align="center">
           <IconButton
             aria-label="expand row"
@@ -188,45 +201,51 @@ const Teams = () => {
 
   return (
     <div>
-      <h1>Teams</h1>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={ranks.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow key="header">
-              {headCells.map((headCell) => (
-                <StyledHeader align="center" key={headCell.id}>
-                  {headCell.label}
-                </StyledHeader>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? ranks.slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage
-                )
-              : ranks
-            ).map((rankTeam: any) => (
-              <Row key={rankTeam.rank} row={rankTeam} />
-            ))}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Typography variant="h3" style={{marginLeft: "5rem"}}>
+        Teams Page
+      </Typography>
+      <Paper style={{marginLeft: "5rem", marginRight: "5rem", padding: "5rem"}}>
+        <div style={{height: '100%', width:'100%'}}>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={ranks.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+          <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
+              <TableHead>
+                <TableRow key="header">
+                  {headCells.map((headCell) => (
+                    <StyledHeader align="center" key={headCell.id}>
+                      {headCell.label}
+                    </StyledHeader>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? ranks.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : ranks
+                ).map((rankTeam: any) => (
+                  <Row key={rankTeam.rank} row={rankTeam} />
+                ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      </Paper>
     </div>
   );
 };
