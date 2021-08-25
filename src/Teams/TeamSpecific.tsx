@@ -34,6 +34,7 @@ import RankService from "../common/Services/RankService";
 import StatService from "../common/Services/StatService";
 import StatSummaryService from "../common/Services/StatSummaryService";
 import TeamService from "../common/Services/TeamService";
+import { CustomGameTable } from "../common/components/CustomGameTable";
 const teamSpecificStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -191,39 +192,49 @@ const TeamSpecific = () => {
           <Typography variant="h4" className={classes.sectionHeading}>
             Elo Rank
           </Typography>
-          <LineChart
-            width={800}
-            height={500}
-            data={ranks.map((rank) => {
-              const game = games.find((game) => game.id == rank.gameId);
-              if (game) {
-                return {
-                  name: new Date(game?.gameTime).toLocaleString(),
-                  Rank: rank.rank,
-                };
-              }
-            })}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis type="number" domain={["auto", "auto"]} />
-            <Legend />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="Rank"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-            />
-          </LineChart>
+          <Grid container justifyContent="space-around" alignItems="center">
+            <LineChart
+              width={800}
+              height={500}
+              data={ranks.map((rank) => {
+                const game = games.find((game) => game.id == rank.gameId);
+                if (game) {
+                  return {
+                    name: new Date(game?.gameTime).toLocaleString(),
+                    Rank: rank.rank,
+                  };
+                }
+              })}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" domain={["auto", "auto"]} />
+              <YAxis type="number" domain={["auto", "auto"]} />
+              <Legend verticalAlign="top" height={36} />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="Rank"
+                stroke="#8884d8"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </Grid>
         </div>
-        <h2>Games Played:</h2>
+        <Divider className={classes.divider} />
+        <Typography variant="h4" className={classes.sectionHeading}>
+          Games Played
+        </Typography>
+        <CustomGameTable
+          game={games.sort(
+            (a, b) => b.gameTime.getTime() - a.gameTime.getTime()
+          )}
+        />
       </Paper>
     </div>
   );
