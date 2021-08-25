@@ -170,7 +170,7 @@ const TeamSpecific = () => {
           <Grid item>
             <Card>
               <CardContent>
-                <Typography variant="h6">Stats (Averages)</Typography>
+                <Typography variant="h6">Stats (Avg)</Typography>
                 <Typography>
                   <b>Goals Scored:</b> {statSummary?.average.goals.toFixed(2)}
                 </Typography>
@@ -186,7 +186,46 @@ const TeamSpecific = () => {
               </CardContent>
             </Card>
           </Grid>
+          <Grid item>
+            <Card>
+              <CardContent>
+                <Typography variant="h6">Office Ranking (Total)</Typography>
+                <Typography>
+                  <b>Goals Scored:</b> {officeRanking?.summary.total.goals}
+                </Typography>
+                <Typography>
+                  <b>Assists:</b> {officeRanking?.summary.total.assists}
+                </Typography>
+                <Typography>
+                  <b>Shots:</b> {officeRanking?.summary.total.shots}
+                </Typography>
+                <Typography>
+                  <b>Saves:</b> {officeRanking?.summary.total.saves}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item>
+            <Card>
+              <CardContent>
+                <Typography variant="h6">Office Ranking (Avg)</Typography>
+                <Typography>
+                  <b>Goals Scored:</b> {officeRanking?.summary.average.goals}
+                </Typography>
+                <Typography>
+                  <b>Assists:</b> {officeRanking?.summary.average.assists}
+                </Typography>
+                <Typography>
+                  <b>Shots:</b> {officeRanking?.summary.average.shots}
+                </Typography>
+                <Typography>
+                  <b>Saves:</b> {officeRanking?.summary.average.saves}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
+
         <Divider className={classes.divider} />
         <div>
           <Typography variant="h4" className={classes.sectionHeading}>
