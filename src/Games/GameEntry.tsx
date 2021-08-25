@@ -50,6 +50,9 @@ const GameEntry = () => {
   };
 
   const areScoresAndStatsValid = () => {
+    if (blueScore === redScore) {
+      return false;
+    }
     if (blueScore + redScore === 0) {
       return false;
     }
