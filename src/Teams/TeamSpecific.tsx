@@ -2,6 +2,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Container,
   createStyles,
   Divider,
   Grid,
@@ -12,6 +13,16 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import {
+  ResponsiveContainer,
+  LineChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Legend,
+  Line,
+  Tooltip,
+} from "recharts";
 import { Game } from "../common/models/Game";
 import { Rank } from "../common/models/Rank";
 import { Stat } from "../common/models/Stat";
@@ -97,7 +108,7 @@ const TeamSpecific = () => {
         <Typography variant="h4" className={classes.sectionHeading}>
           Players
         </Typography>
-        <div>
+        <div className={classes.nameContainer}>
           {team?.team.map((player) => {
             return (
               <Typography
@@ -160,16 +171,16 @@ const TeamSpecific = () => {
               <CardContent>
                 <Typography variant="h6">Stats (Averages)</Typography>
                 <Typography>
-                  <b>Goals Scored:</b> {statSummary?.average.goals}
+                  <b>Goals Scored:</b> {statSummary?.average.goals.toFixed(2)}
                 </Typography>
                 <Typography>
-                  <b>Assists:</b> {statSummary?.average.assists}
+                  <b>Assists:</b> {statSummary?.average.assists.toFixed(2)}
                 </Typography>
                 <Typography>
-                  <b>Shots:</b> {statSummary?.average.shots}
+                  <b>Shots:</b> {statSummary?.average.shots.toFixed(2)}
                 </Typography>
                 <Typography>
-                  <b>Saves:</b> {statSummary?.average.saves}
+                  <b>Saves:</b> {statSummary?.average.saves.toFixed(2)}
                 </Typography>
               </CardContent>
             </Card>
@@ -180,6 +191,37 @@ const TeamSpecific = () => {
           <Typography variant="h4" className={classes.sectionHeading}>
             Elo Rank
           </Typography>
+          <LineChart
+            width={800}
+            height={500}
+            data={ranks.map((rank) => {
+              const game = games.find((game) => game.id == rank.gameId);
+              if (game) {
+                return {
+                  name: new Date(game?.gameTime).toLocaleString(),
+                  Rank: rank.rank,
+                };
+              }
+            })}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis type="number" domain={["auto", "auto"]} />
+            <Legend />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="Rank"
+              stroke="#8884d8"
+              activeDot={{ r: 8 }}
+            />
+          </LineChart>
         </div>
         <h2>Games Played:</h2>
       </Paper>

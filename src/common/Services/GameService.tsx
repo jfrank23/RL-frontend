@@ -1,10 +1,11 @@
 import axios from "axios";
+import moment from "moment";
 import { Game } from "../models/Game";
 import { backendUrl } from "../variables/urls";
 import RankService from "./RankService";
 import StatService from "./StatService";
 import TeamService from "./TeamService";
-
+import "moment-timezone";
 export default class GameService {
   static async createGame(game: Game) {
     let blueTeamId: number = await TeamService.addTeam(game.blueTeam.team);
@@ -79,7 +80,13 @@ export default class GameService {
       return {
         blueScore: dbGame.blue_score,
         redScore: dbGame.red_score,
-        gameTime: dbGame.game_time,
+        gameTime: new Date(
+          moment
+            .utc(dbGame.game_time)
+            .subtract(4, "hours")
+            .tz("America/New_York")
+            .format("YYYY-MM-DD HH:mm:ss.SSS")
+        ),
         id: dbGame.game_id,
         blueTeam: blueTeam,
         redTeam: orangeTeam,
