@@ -6,24 +6,33 @@ import {
     Button,
 } from "@material-ui/core";
 
+import {
+    withStyles,
+    Theme,
+    createStyles,
+    makeStyles,
+  } from "@material-ui/core/styles";
 import { DataGrid, GridRowsProp, GridColDef } from '@material-ui/data-grid';
 import { teamGenStyles } from "./TeamGenStyles";
-import { ENGINE_METHOD_PKEY_ASN1_METHS } from "constants";
-import { render } from "@testing-library/react";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TablePagination from "@material-ui/core/TablePagination";
+import IconButton from "@material-ui/core/IconButton";
+import SearchIcon from "@material-ui/icons/Search";
 
-class Test extends React.Component{
-    render(){
-        return <h1>Hello, {this.props}</h1>;
-    }
-}
 
 const TeamGenerator = () => {
+    const [pageSize, setPageSize] = React.useState<number>(10);
     const players: Player[] = [
         {id: 456, firstName: 'A', lastName: 'Lu' }, 
         {id: 123, firstName: 'B', lastName: 'Franklin' },
         {id: 273, firstName: 'C', lastName: 'Yang' },
         {id: 1493, firstName: 'D', lastName: 'Franzo' },
-        {id: 812, firstName: 'E', lastName: 'Szymanski' },
+        {id: 81155, firstName: 'E', lastName: 'Szymanski' },
         {id: 8132, firstName: 'F', lastName: 'Szymanski' },
         {id: 842, firstName: 'G', lastName: 'Szymanski' },
         {id: 812, firstName: 'H', lastName: 'Szymanski' },
@@ -39,9 +48,22 @@ const TeamGenerator = () => {
         }))
     ];
     const columns: GridColDef[] = [
-        { field: 'playerId', headerName: 'Player ID', width: 200 },
-        { field: 'firstName', headerName: 'First Name', width: 200 },
-        { field: 'lastName', headerName: 'Last Name', width: 200 },
+        {
+            field: "firstName",
+            headerName: "First Name",
+            flex: 1.25,
+            headerAlign: "center",
+            headerClassName: "super-app-theme--header",
+            align: "center",
+          },
+          {
+            field: "lastName",
+            headerName: "Last Name",
+            flex: 1.25,
+            headerAlign: "center",
+            headerClassName: "super-app-theme--header",
+            align: "center",
+          },
     ];
 
 
@@ -78,9 +100,6 @@ const TeamGenerator = () => {
     if(num_players > 8){
         num_players = 8;
     }
-    while(players.length > num_players){
-        players.splice(Math.floor(Math.random()*players.length), 1);
-    }
     for (let i = 0; i < players.length; i++){
         if(Math.random() < 0.5){
             if(team1.length === Math.floor(num_players/2)){
@@ -100,14 +119,21 @@ const TeamGenerator = () => {
         <div>
             <Typography variant="h3" className={classes.title}>Generate a Team</Typography>
             <Paper className={classes.paper}>
-                <div style={{height: 400, width:'100%'}}>
-                    <DataGrid
-                        checkboxSelection
-                        rows={rows}
-                        columns={columns}
-                        onSelectionModelChange={e => console.log(e)}
-                    />
+                <div style={{ height: "100%", width: "100%" }} className={classes.root}>
+                <DataGrid
+                    checkboxSelection
+                    rows={rows}
+                    columns={columns}
+                    pageSize={pageSize}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                    rowsPerPageOptions={[5, 10, 25]}
+                    disableColumnMenu
+                    autoHeight={true}
+                    pagination
+                    onSelectionModelChange={e => console.log(e)}
+                />
                 </div>
+
                 <Typography variant="h6" className={classes.title}>{ num_players } players selected</Typography>
                 <Button
                     variant="contained"
@@ -117,10 +143,9 @@ const TeamGenerator = () => {
                     Generate
                 </Button>
             </Paper>
+            
             <Paper className={classes.paper}>
-            <h1 style={{display:'inline'}}>{ Math.floor(num_players/2) } V { Math.floor(num_players/2) }</h1>
-            </Paper>
-            <Paper className={classes.paper}>
+                <h1>{ Math.floor(num_players/2) } V { Math.floor(num_players/2) }</h1>
                 <Paper className={classes.teams}>
                     <Typography variant="h6" className={classes.title}>Team 1</Typography>
                     <Typography variant="h6" className={classes.title}>{ team1 }</Typography>
@@ -136,6 +161,5 @@ const TeamGenerator = () => {
 
     );
 };
-
 
 export default TeamGenerator;
