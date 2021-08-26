@@ -46,7 +46,7 @@ export function Row(props: { row: any }) {
   const { row } = props;
   const classes = useRowStyles();
   const history = useHistory();
-  let date = moment.default(row.gameTime).format("DD-MMM-YYYY HH:mm");
+  let date = moment.default(row.gameTime).format("MMM DD,YYYY hh:mm a");
 
   return (
     <React.Fragment>
