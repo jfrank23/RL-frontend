@@ -114,6 +114,15 @@ const MaterialMenu = ({ children }: MaterialMenuProps) => {
               className={clsx(classes.whiteText)}
             ></ListItemText>
           </ListItem>
+          <ListItem key={7} button component={Link} to="/team_generator">
+            <ListItemIcon>
+              <AddBox className={classes.whiteText} fontSize="large" />
+            </ListItemIcon>
+            <ListItemText
+              primary={"Generate a team"}
+              className={clsx(classes.whiteText)}
+            ></ListItemText>
+          </ListItem>
         </List>
       </>
     );
