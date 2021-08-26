@@ -45,7 +45,7 @@ const useStylesMenu = makeStyles((theme) => ({
   },
   drawerPaper: {
     borderRight: "none",
-    background: "linear-gradient(225deg, #39B54A, #006838)",
+    background: "linear-gradient(225deg, #0c88fc, #0859a5)",
     position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,

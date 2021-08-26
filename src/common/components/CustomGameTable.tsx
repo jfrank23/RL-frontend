@@ -24,7 +24,7 @@ const headCells = [
 const StyledHeader = withStyles((theme: Theme) =>
   createStyles({
     head: {
-      backgroundColor: theme.palette.success.dark,
+      backgroundColor: theme.palette.primary.dark,
       color: theme.palette.common.white,
       borderRight: `1px solid ${
         theme.palette.type === "light" ? "#f0f0f0" : "#303030"
