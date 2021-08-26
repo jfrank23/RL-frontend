@@ -10,6 +10,7 @@ import Teams from "./Teams/TeamsPage";
 import Games from "./Games/GamesPage";
 import GameEntry from "./Games/GameEntry";
 import PlayerEntry from "./Players/PlayerEntry";
+import TeamGenerator from "./Teams/TeamGenerator";
 
 import mainTheme from "./common/variables/theme";
 
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/teams" component={Teams} />
             <Route path="/game_entry" component={GameEntry} />
             <Route path="/player_entry" component={PlayerEntry} />
+            <Route path="/team_generator" component={TeamGenerator} />
           </MaterialMenu>
         </main>
       </Router>
