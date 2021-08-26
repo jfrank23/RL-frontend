@@ -1,9 +1,9 @@
 import {
   AverageSummary,
   OfficeRanking,
-  StatSummary,
   TotalSummary,
 } from "../models/StatSummary";
+import GameService from "./GameService";
 import PlayerService from "./PlayerService";
 import StatService from "./StatService";
 import StatSummaryService from "./StatSummaryService";
@@ -24,12 +24,18 @@ export default class OfficeRankService {
           saves: 0,
           points: 0,
           gamesPlayed: 0,
+          wins: 0,
+          losses: 0,
         },
       },
     };
     for (let team of teams) {
+      if (!team.id) {
+        continue;
+      }
       const stats = await StatService.getStatsByTeam(team);
-      let summary = StatSummaryService.generateSummary(stats);
+      const games = await GameService.getGamesByTeam(team.id);
+      let summary = StatSummaryService.generateSummary(stats, games, team.id);
       summaries.push({ id: team.id || 0, summary: summary });
     }
     for (let field of [
@@ -75,12 +81,18 @@ export default class OfficeRankService {
           saves: 0,
           points: 0,
           gamesPlayed: 0,
+          wins: 0,
+          losses: 0,
         },
       },
     };
     for (let player of players) {
+      if (!player.id) {
+        continue;
+      }
       const stats = await StatService.getStatsByPlayer(player);
-      let summary = StatSummaryService.generateSummary(stats);
+      const games = await GameService.getGamesByPlayerId(player.id);
+      let summary = StatSummaryService.generateSummary(stats, games, player.id);
       summaries.push({ id: player.id || 0, summary: summary });
     }
     for (let field of [
@@ -90,6 +102,7 @@ export default class OfficeRankService {
       "shots",
       "goals",
       "gamesPlayed",
+      "wins",
     ] as (keyof TotalSummary)[]) {
       summaries.sort((a, b) => b.summary.total[field] - a.summary.total[field]);
       const rank = summaries.findIndex((a) => a.id === playerId) + 1;

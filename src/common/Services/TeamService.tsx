@@ -62,8 +62,9 @@ export default class TeamService {
   }
 
   static async getTeamsByPlayerId(singlePlayerId: number): Promise<Team[]> {
-    let dbTeams = (await axios.get(`${backendUrl}/teams/${singlePlayerId}`))
-      .data;
+    let dbTeams = (
+      await axios.get(`${backendUrl}/teams/player/${singlePlayerId}`)
+    ).data;
     let teams: Team[] = [];
     for (let dbTeam of dbTeams) {
       let id = dbTeam.team_id;

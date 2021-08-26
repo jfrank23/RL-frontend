@@ -35,7 +35,6 @@ export default class RankService {
     const recentRankOrangObj = await this.getMostRecentRankByTeam(orangeTeamId);
     let mostRecentRankBlue = recentRankBlueObj.rank;
     let mostRecentRankOrange = recentRankOrangObj.rank;
-    debugger;
     if (!mostRecentRankBlue) {
       mostRecentRankBlue = 1200;
     }

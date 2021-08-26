@@ -13,6 +13,8 @@ import PlayerEntry from "./Players/PlayerEntry";
 import PlayerSpecific from "./Players/PlayerSpecific";
 
 import mainTheme from "./common/variables/theme";
+import TeamSpecific from "./Teams/TeamSpecific";
+import GameSpecific from "./Games/GamesSpecific";
 
 export default function App() {
   return (
@@ -23,8 +25,10 @@ export default function App() {
             <Route path="/" exact component={Home} />
             <Route path="/players" component={Players} />
             <Route path="/playerSpecific/:id" component={PlayerSpecific} />
-            <Route path="/games" component={Games} />
-            <Route path="/teams" component={Teams} />
+            <Route path="/games" exact component={Games} />
+            <Route path="/games/:id" component={GameSpecific} />
+            <Route path="/teams" exact component={Teams} />
+            <Route path="/teams/:id" component={TeamSpecific} />
             <Route path="/game_entry" component={GameEntry} />
             <Route path="/player_entry" component={PlayerEntry} />
           </MaterialMenu>
