@@ -17,6 +17,29 @@ export const teamGenStyles = makeStyles((theme: Theme) =>
       marginRight: "1rem",
       padding: "1rem",
       width: "50%",
-    }
+    },
+    root: {
+      "& .super-app-theme--header": {
+        backgroundColor: theme.palette.success.dark,
+        color: theme.palette.common.white,
+      },
+      "& .super-app-theme--cell": {
+        backgroundColor: theme.palette.success.dark,
+        color: theme.palette.common.white,
+      },
+      "& .MuiDataGrid-iconSeparator": {
+        display: "none",
+      },
+      "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
+        borderRight: `1px solid ${
+          theme.palette.type === "light" ? "#f0f0f0" : "#303030"
+        }`,
+      },
+      "& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell": {
+        borderBottom: `1px solid ${
+          theme.palette.type === "light" ? "#f0f0f0" : "#303030"
+        }`,
+      },
+    },
   })
 );
