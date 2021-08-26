@@ -1,5 +1,6 @@
 import { DataGrid, GridRowsProp, GridColDef } from "@material-ui/data-grid";
 import React from "react";
+import { Typography } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { useEffect, useState } from "react";
@@ -195,36 +196,42 @@ const PlayerSpecific = () => {
 
   return (
     <div>
-      <h1>a name id: {id}</h1>
-      <h2>General Player Stats</h2>
-      <h2>Games Played:</h2>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={games.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow key="header">
-              {headCells.map((headCell) => (
-                <StyledHeader align="center" key={headCell.id}>
-                  {headCell.label}
-                </StyledHeader>
+      <Typography variant="h3" style={{ marginLeft: "5rem" }}>
+        {player?.firstName} {player?.lastName}
+      </Typography>
+      <Paper
+        style={{ marginLeft: "5rem", marginRight: "5rem", padding: "5rem" }}
+      >
+        <h2>General Player Stats</h2>
+        <h1>Games Played:</h1>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={games.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow key="header">
+                {headCells.map((headCell) => (
+                  <StyledHeader align="center" key={headCell.id}>
+                    {headCell.label}
+                  </StyledHeader>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {games.map((game) => (
+                <Row key={game.id} row={game} />
               ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {games.map((game) => (
-              <Row key={game.id} row={game} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </div>
   );
 };
