@@ -23,7 +23,11 @@ const Games = () => {
       <Paper
         style={{ marginLeft: "5rem", marginRight: "5rem", padding: "5rem" }}
       >
-        <CustomGameTable game={allGames} />
+        <CustomGameTable 
+          game={allGames.sort(
+            (a, b) => new Date(b.gameTime).getTime() - new Date(a.gameTime).getTime()
+          )} 
+        />
       </Paper>
     </div>
   );
