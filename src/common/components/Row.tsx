@@ -45,6 +45,7 @@ export const useRowStyles = makeStyles({
 export function Row(props: { row: any }) {
   const { row } = props;
   const classes = useRowStyles();
+  const history = useHistory();
   let date = moment.default(row.gameTime).format("DD-MMM-YYYY HH:mm");
 
   return (
@@ -61,7 +62,7 @@ export function Row(props: { row: any }) {
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => window.open()}
+            onClick={() => history.push(`/games/${row.id}`)}
           >
             {<SearchIcon />}
           </IconButton>
