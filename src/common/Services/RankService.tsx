@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Rank } from "../models/Rank";
-import { Team } from "../models/Team";
 import { backendUrl } from "../variables/urls";
 import TeamService from "./TeamService";
 
