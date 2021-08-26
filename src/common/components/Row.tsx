@@ -6,6 +6,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import * as moment from "moment";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import styled from "styled-components";
 
 export const StyledCell = withStyles((theme: Theme) =>
   createStyles({
@@ -17,18 +18,25 @@ export const StyledCell = withStyles((theme: Theme) =>
   })
 )(TableCell);
 
+const StyledDiv = styled.div`
+  color: blue;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+
 export function TeamPlayers(team: any) {
   const history = useHistory();
 
   return (
     <React.Fragment>
       {team.team.map((player: any) => (
-        <div
+        <StyledDiv
           onClick={() => history.push(`/PlayerSpecific/${player.id}`)}
-          className="txtlink"
         >
           {player.firstName} {player.lastName}
-        </div>
+        </StyledDiv>
       ))}
     </React.Fragment>
   );

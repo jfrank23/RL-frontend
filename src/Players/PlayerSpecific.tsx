@@ -20,7 +20,6 @@ import {
   createStyles,
   makeStyles,
 } from "@material-ui/core/styles";
-import "../Teams/TeamsPage.css";
 
 import { Rank } from "../common/models/Rank";
 import { Player } from "../common/models/Player";
@@ -30,8 +29,17 @@ import { Stat } from "../common/models/Stat";
 import PlayerService from "../common/Services/PlayerService";
 import TeamService from "../common/Services/TeamService";
 import { idText } from "typescript";
+import styled from "styled-components";
 
 //---------CSS--------------
+const StyledDiv = styled.div`
+  color: blue;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+
 const useRowStyles = makeStyles({
   root: {
     "& > *": {
@@ -131,9 +139,9 @@ function teamPlayers(team: any) {
   return (
     <React.Fragment>
       {team.team.map((player: any) => (
-        <div onClick={() => window.open()} className="txtlink">
+        <StyledDiv onClick={() => window.open()}>
           {player.firstName} {player.lastName}
-        </div>
+        </StyledDiv>
       ))}
     </React.Fragment>
   );

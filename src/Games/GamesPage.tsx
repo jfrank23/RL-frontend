@@ -3,7 +3,6 @@ import Paper from "@material-ui/core/Paper";
 import React, { useEffect, useState } from "react";
 import { Game } from "../common/models/Game";
 import GameService from "../common/Services/GameService";
-import "../Teams/TeamsPage.css";
 import { CustomGameTable } from "../common/components/CustomGameTable";
 
 const Games = () => {
