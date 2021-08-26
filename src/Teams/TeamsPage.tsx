@@ -126,24 +126,11 @@ function TeamRow(props: { teamRow: any }) {
 
 const Teams = () => {
   const [allRanks, setAllRanks] = useState<Rank[]>([]);
-  const [allTeams, setAllTeams] = useState<Team[]>([]);
-  const recentRanks: Rank[] = [];
   useEffect(() => {
-    RankService.getAllRanks().then((ranks) => {
-      setAllRanks(ranks);
-    });
-    TeamService.getAllTeams().then((teams) => {
-      setAllTeams(teams);
+    RankService.getAllTeamsRecentRanks().then((ranks) => {
+      setAllRanks(ranks.sort((a, b) => b.rank - a.rank));
     });
   }, []);
-  useEffect(() => {
-    allRanks.map((teamRow) => {
-      console.log(teamRow.teamId);
-      RankService.getMostRecentRankByTeam(teamRow.teamId).then((recentRank) => {
-        console.log(recentRank);
-      });
-    });
-  });
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
