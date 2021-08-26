@@ -2,6 +2,7 @@ import axios from "axios";
 import { Rank } from "../models/Rank";
 import { Team } from "../models/Team";
 import { backendUrl } from "../variables/urls";
+import TeamService from "./TeamService";
 
 export default class RankService {
   static async getAllRanks(): Promise<Rank[]> {
@@ -21,6 +22,18 @@ export default class RankService {
   static async getMostRecentRankByTeam(teamId: number): Promise<Rank> {
     let response = await axios.get(`${backendUrl}/ranks/team/recent/${teamId}`);
     return mapDbToRank(response.data);
+  }
+
+  static async getAllTeamsRecentRanks(): Promise<Rank[]> {
+    let ranks: Rank[] = [];
+    const teams = await TeamService.getAllTeams();
+    for (let team of teams) {
+      if (team.id) {
+        const rank = await RankService.getMostRecentRankByTeam(team.id);
+        ranks.push(rank);
+      }
+    }
+    return ranks;
   }
 
   static async generateNewRank(
