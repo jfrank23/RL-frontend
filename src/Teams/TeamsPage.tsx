@@ -48,7 +48,7 @@ const StyledHeader = withStyles((theme: Theme) =>
       backgroundColor: theme.palette.success.dark,
       color: theme.palette.common.white,
       borderRight: `1px solid ${
-        theme.palette.type === 'light' ? '#f0f0f0' : '#303030'
+        theme.palette.type === "light" ? "#f0f0f0" : "#303030"
       }`,
     },
   })
@@ -58,7 +58,7 @@ const StyledCell = withStyles((theme: Theme) =>
   createStyles({
     root: {
       borderRight: `1px solid ${
-        theme.palette.type === 'light' ? '#f0f0f0' : '#303030'
+        theme.palette.type === "light" ? "#f0f0f0" : "#303030"
       }`,
     },
   })
@@ -97,7 +97,9 @@ function TeamRow(props: { teamRow: any }) {
       setRecentMatch(match);
     });
   }, []);
-  let date = moment.default(recentMatch?.gameTime).format("DD-MMM-YYYY HH:mm");
+  let date = moment
+    .default(recentMatch?.gameTime)
+    .format("MMM DD,YYYY hh:mm a");
 
   return (
     <React.Fragment>
@@ -105,9 +107,7 @@ function TeamRow(props: { teamRow: any }) {
         <StyledCell align="center" component="th" scope="row">
           {teamRow.rank}
         </StyledCell>
-        <StyledCell align="center">
-          {TeamPlayers(team)}
-        </StyledCell>
+        <StyledCell align="center">{TeamPlayers(team)}</StyledCell>
         <StyledCell align="center">
           <div
             onClick={() => history.push(`/games/${recentMatch?.id}`)}
@@ -133,7 +133,7 @@ function TeamRow(props: { teamRow: any }) {
 const Teams = () => {
   const [allRanks, setAllRanks] = useState<Rank[]>([]);
   const [allTeams, setAllTeams] = useState<Team[]>([]);
-  const recentRanks : Rank[] = [];
+  const recentRanks: Rank[] = [];
   useEffect(() => {
     RankService.getAllRanks().then((ranks) => {
       setAllRanks(ranks);
@@ -144,13 +144,13 @@ const Teams = () => {
   }, []);
   useEffect(() => {
     allRanks.map((teamRow) => {
-        console.log(teamRow.teamId);
-        RankService.getMostRecentRankByTeam(teamRow.teamId).then((recentRank) => {
-          console.log(recentRank);
+      console.log(teamRow.teamId);
+      RankService.getMostRecentRankByTeam(teamRow.teamId).then((recentRank) => {
+        console.log(recentRank);
       });
     });
   });
-  
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const emptyRows =
@@ -174,11 +174,13 @@ const Teams = () => {
 
   return (
     <div>
-      <Typography variant="h3" style={{marginLeft: "5rem"}}>
+      <Typography variant="h3" style={{ marginLeft: "5rem" }}>
         Teams Page
       </Typography>
-      <Paper style={{marginLeft: "5rem", marginRight: "5rem", padding: "5rem"}}>
-        <div style={{height: '100%', width:'100%'}}>
+      <Paper
+        style={{ marginLeft: "5rem", marginRight: "5rem", padding: "5rem" }}
+      >
+        <div style={{ height: "100%", width: "100%" }}>
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
