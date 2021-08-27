@@ -16,11 +16,11 @@ import StatSummaryService from "../common/Services/StatSummaryService";
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     "& .super-app-theme--header": {
-      backgroundColor: theme.palette.success.dark,
+      backgroundColor: theme.palette.primary.dark,
       color: theme.palette.common.white,
     },
     "& .super-app-theme--cell": {
-      backgroundColor: theme.palette.success.dark,
+      backgroundColor: theme.palette.primary.dark,
       color: theme.palette.common.white,
     },
     "& .MuiDataGrid-iconSeparator": {

@@ -1,37 +1,31 @@
 //import { DataGrid, GridRowsProp, GridColDef } from '@material-ui/data-grid';
-import React from "react";
-import { Button, Typography } from "@material-ui/core";
-import { useEffect, useState } from "react";
-
+import { Typography } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import Paper from "@material-ui/core/Paper";
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  withStyles,
+} from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
-import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
+import TableRow from "@material-ui/core/TableRow";
 import SearchIcon from "@material-ui/icons/Search";
-import {
-  withStyles,
-  Theme,
-  createStyles,
-  makeStyles,
-} from "@material-ui/core/styles";
-import "./TeamsPage.css";
-
-import { Rank } from "../common/models/Rank";
-import { Player } from "../common/models/Player";
-import { Team } from "../common/models/Team";
-import { Game } from "../common/models/Game";
-import { Stat } from "../common/models/Stat";
-import PlayerService from "../common/Services/PlayerService";
-import TeamService from "../common/Services/TeamService";
-import { useHistory } from "react-router-dom";
-import RankService from "../common/Services/RankService";
-import GameService from "../common/Services/GameService";
 import * as moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { Game } from "../common/models/Game";
+import { Rank } from "../common/models/Rank";
+import { Team } from "../common/models/Team";
+import GameService from "../common/Services/GameService";
+import RankService from "../common/Services/RankService";
+import TeamService from "../common/Services/TeamService";
+import "./TeamsPage.css";
 
 //---------CSS--------------
 const useRowStyles = makeStyles({
@@ -45,7 +39,7 @@ const useRowStyles = makeStyles({
 const StyledHeader = withStyles((theme: Theme) =>
   createStyles({
     head: {
-      backgroundColor: theme.palette.success.dark,
+      backgroundColor: theme.palette.primary.dark,
       color: theme.palette.common.white,
       borderRight: `1px solid ${
         theme.palette.type === "light" ? "#f0f0f0" : "#303030"
@@ -132,24 +126,11 @@ function TeamRow(props: { teamRow: any }) {
 
 const Teams = () => {
   const [allRanks, setAllRanks] = useState<Rank[]>([]);
-  const [allTeams, setAllTeams] = useState<Team[]>([]);
-  const recentRanks: Rank[] = [];
   useEffect(() => {
-    RankService.getAllRanks().then((ranks) => {
-      setAllRanks(ranks);
-    });
-    TeamService.getAllTeams().then((teams) => {
-      setAllTeams(teams);
+    RankService.getAllTeamsRecentRanks().then((ranks) => {
+      setAllRanks(ranks.sort((a, b) => b.rank - a.rank));
     });
   }, []);
-  useEffect(() => {
-    allRanks.map((teamRow) => {
-      console.log(teamRow.teamId);
-      RankService.getMostRecentRankByTeam(teamRow.teamId).then((recentRank) => {
-        console.log(recentRank);
-      });
-    });
-  });
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
