@@ -1,10 +1,7 @@
-import { DataGrid, GridRowsProp, GridColDef } from "@material-ui/data-grid";
 import React from "react";
 import {
   Card,
   CardContent,
-  CardHeader,
-  Container,
   createStyles,
   Divider,
   Grid,
@@ -14,21 +11,19 @@ import {
   Typography,
   withStyles,
   IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
 } from "@material-ui/core";
-
 import { useHistory, useParams } from "react-router-dom";
-import { Button } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { CustomGameTable } from "../common/components/CustomGameTable";
 import "../Teams/TeamsPage.css";
 import * as moment from "moment";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
 import SearchIcon from "@material-ui/icons/Search";
 import { Rank } from "../common/models/Rank";
 import { Player } from "../common/models/Player";
@@ -42,7 +37,6 @@ import GameService from "../common/Services/GameService";
 import OfficeRankService from "../common/Services/OfficeRankingService";
 import StatService from "../common/Services/StatService";
 import StatSummaryService from "../common/Services/StatSummaryService";
-import { idText } from "typescript";
 import RankService from "../common/Services/RankService";
 
 const teamSpecificStyles = makeStyles((theme: Theme) =>
@@ -107,16 +101,23 @@ const StyledCell = withStyles((theme: Theme) =>
     },
   })
 )(TableCell);
-//------------------Table---------------------------
+//------------------Teams Table---------------------------
 
 function TeamPlayers(team?: Team) {
   const history = useHistory();
+
+  function refreshPage() {
+    window.location.reload();
+  }
 
   return (
     <React.Fragment>
       {team?.team.map((player: any) => (
         <div
-          onClick={() => history.push(`/PlayerSpecific/${player.id}`)}
+          onClick={() => {
+            history.push(`/PlayerSpecific/${player.id}`);
+            refreshPage();
+          }}
           className="txtlink"
         >
           {player.firstName} {player.lastName}
