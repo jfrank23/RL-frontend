@@ -174,6 +174,37 @@ function TeamRow(props: { teamRow: any }) {
   );
 }
 
+// game row
+export function Row(props: { row: any }) {
+  const { row } = props;
+  const classes = useRowStyles();
+  const history = useHistory();
+  let date = moment.default(row.gameTime).format("MMM DD,YYYY hh:mm a");
+
+  return (
+    <React.Fragment>
+      <TableRow hover key={row.teamId} className={classes.root}>
+        <StyledCell align="center" component="th" scope="row">
+          {date}
+        </StyledCell>
+        <StyledCell align="center">{TeamPlayers(row.blueTeam)}</StyledCell>
+        <StyledCell align="center">{TeamPlayers(row.redTeam)}</StyledCell>
+        <StyledCell align="center">{row.blueScore}</StyledCell>
+        <StyledCell align="center">{row.redScore}</StyledCell>
+        <TableCell align="center">
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => history.push(`/games/${row.id}`)}
+          >
+            {<SearchIcon />}
+          </IconButton>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
 //--------------Driver fucntion --------------------
 const PlayerSpecific = () => {
   const { id } = useParams() as any;
@@ -240,6 +271,15 @@ const PlayerSpecific = () => {
     { id: "teamPlayers", numberic: false, label: "Team Players" },
     { id: "recentMatch", numberic: true, label: "Most Recent Match" },
     { id: "details", numberic: false, label: "Details" },
+  ];
+
+  const gameHeadCells = [
+    { id: "date", numberic: true, label: "Date" },
+    { id: "blueTeam", numberic: false, label: "Blue Team" },
+    { id: "orangeTeam", numberic: false, label: "Orange Team" },
+    { id: "blueScore", numberic: true, label: "Blue Score" },
+    { id: "orangeScore", numberic: true, label: "Orange Score" },
+    { id: "stats", numberic: false, label: "Stats" },
   ];
 
   return (
@@ -354,12 +394,46 @@ const PlayerSpecific = () => {
         <Typography variant="h4" className={classes.sectionHeading}>
           Games Played
         </Typography>
-        <CustomGameTable
-          game={games.sort(
-            (a, b) =>
-              new Date(b.gameTime).getTime() - new Date(a.gameTime).getTime()
-          )}
-        />
+        <div style={{ height: "100%", width: "100%" }}>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={games.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+          <TableContainer component={Paper}>
+            <Table aria-label="games table">
+              <TableHead>
+                <TableRow key="header">
+                  {gameHeadCells.map((headCell) => (
+                    <StyledHeader align="center" key={headCell.id}>
+                      {headCell.label}
+                    </StyledHeader>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? games.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : games
+                ).map((game: any) => (
+                  <Row key={game.id} row={game} />
+                ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
         <Divider className={classes.divider} />
         <Typography variant="h4" className={classes.sectionHeading}>
           Teams
