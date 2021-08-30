@@ -35,6 +35,18 @@ export default class RankService {
     return ranks;
   }
 
+  static async getPlayerTeamsRecentRanks(playerId: number): Promise<Rank[]> {
+    let ranks: Rank[] = [];
+    const teams = await TeamService.getTeamsByPlayerId(playerId);
+    for (let team of teams) {
+      if (team.id) {
+        const rank = await RankService.getMostRecentRankByTeam(team.id);
+        ranks.push(rank);
+      }
+    }
+    return ranks;
+  }
+
   static async generateNewRank(
     blueTeamId: number,
     orangeTeamId: number,
