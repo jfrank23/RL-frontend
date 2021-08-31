@@ -2,11 +2,11 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
 export const teamGenStyles = makeStyles((theme: Theme) =>
   createStyles({
-    title:{
+    title: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
-    },                              
-    teams:{
+    },
+    teams: {
       display: "inline-block",
       marginLeft: "1rem",
       marginRight: "1rem",
@@ -15,11 +15,11 @@ export const teamGenStyles = makeStyles((theme: Theme) =>
     },
     root: {
       "& .super-app-theme--header": {
-        backgroundColor: theme.palette.success.dark,
+        backgroundColor: theme.palette.primary.dark,
         color: theme.palette.common.white,
       },
       "& .super-app-theme--cell": {
-        backgroundColor: theme.palette.success.dark,
+        backgroundColor: theme.palette.primary.dark,
         color: theme.palette.common.white,
       },
       "& .MuiDataGrid-iconSeparator": {
@@ -41,21 +41,21 @@ export const teamGenStyles = makeStyles((theme: Theme) =>
     },
     paper_right: {
       padding: theme.spacing(2),
-      textAlign: 'center',
+      textAlign: "center",
       color: theme.palette.text.secondary,
       marginLeft: "1rem",
       marginRight: "5rem",
     },
     paper_left: {
       padding: theme.spacing(2),
-      textAlign: 'center',
+      textAlign: "center",
       color: theme.palette.text.secondary,
       marginLeft: "5rem",
       marginRight: "1rem",
     },
     paper: {
       padding: theme.spacing(2),
-      textAlign: 'center',
+      textAlign: "center",
       color: theme.palette.text.secondary,
       marginLeft: "5rem",
       marginRight: "5rem",
