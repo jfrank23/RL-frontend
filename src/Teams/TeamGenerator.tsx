@@ -4,13 +4,17 @@ import {
     Paper,
     Typography,
     Button,
+    Grid,
 } from "@material-ui/core";
-import Grid from '@material-ui/core/Grid';
 
 import { DataGrid, GridRowsProp, GridColDef, GridSelectionApi, GridSelectionModel } from '@material-ui/data-grid';
 import { teamGenStyles } from "./TeamGenStyles";
 import ReactDOM from "react-dom";
 import PlayerService from "../common/Services/PlayerService";
+
+let selectedPlayers: any = [];
+let num_players = -1;
+
 function NumberList(props: any){
     const n = props.teams;
     const listItems = n.map((n:any) =>
@@ -58,32 +62,35 @@ const TeamGenerator = () => {
             align: "center",
           },
     ];
-
-    let selectedPlayers:any[] = [];
+    
     let team1:string[] = [];
     let team2:string[] = [];
 
-    let num_players = allPlayers.length;
+    
     const classes = teamGenStyles();
     function handleCheckbox(e:GridSelectionModel){
         selectedPlayers = [];
         for(let i = 0; i < e.length; i++){
-            let decimal: any = e[i];
-            PlayerService.getPlayerById(decimal).then((players) => {
-                //console.log(players.firstName, players.lastName);
-                selectedPlayers.push(""+players.firstName + " " + players.lastName);
-                console.log(selectedPlayers);
-            });
+            selectedPlayers.push(e[i]);
+        }
+        num_players = selectedPlayers.length;
+        console.log(num_players);
+    }
+    const handleNumberSelected = () => {
+        if(num_players >= 4){
+            return ("Selected " + num_players + " players");
+        } else {
+            return ("Please select at least four players");
         }
     }
 
     const handleGenerate = () => {
         team1 = [];
         team2 = [];
+
         if(num_players > 8){
             num_players = 8;
         }
-
         if(num_players < 4){
             num_players = -1;
         }
@@ -91,6 +98,12 @@ const TeamGenerator = () => {
             team1.push("No enough players");
             team2.push("No enough players");
         } else {
+            for (let i = 0; i < allPlayers.length;i++){
+                if(!selectedPlayers.includes(allPlayers[i].id)){
+                    allPlayers.splice(i, 1);
+                    i-=1
+                }
+            }
             while(allPlayers.length > (2*Math.floor(num_players/2))){
                 allPlayers.splice(Math.floor(Math.random()*allPlayers.length), 1);
             }
@@ -137,12 +150,9 @@ const TeamGenerator = () => {
                                 autoHeight={true}
                                 pagination
                                 onSelectionModelChange={ (e) => handleCheckbox(e) }
-                                
                             />
                         </div>
-                        <Typography variant="h6" className={classes.title}>{ num_players } players selected</Typography>
-                        <Typography variant="h6" className={classes.title}> { /*selectedPlayerIDs*/ }</Typography>
-                        <Button
+                        <Typography variant="h6" className={classes.title}> { handleNumberSelected() }</Typography>                        <Button
                             variant="contained"
                             color="primary"
                             onClick={ handleGenerate }

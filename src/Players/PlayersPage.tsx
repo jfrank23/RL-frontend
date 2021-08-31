@@ -71,7 +71,7 @@ const PlayersPage = () => {
 
   const rows: GridRowsProp = [
     ...allPlayers.map((player) => {
-      const stats = allStats.filter((stat) => stat.playerId == player.id);
+      const stats = allStats.filter((stat) => stat.playerId === player.id);
       const games = allGames.filter(
         (game) =>
           game.blueTeam.team.map((player) => player.id).includes(player.id) ||
