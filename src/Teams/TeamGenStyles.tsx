@@ -2,11 +2,6 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
 export const teamGenStyles = makeStyles((theme: Theme) =>
   createStyles({
-    paper: {
-      marginLeft: "5rem",
-      marginRight: "5rem",
-      padding: "5rem",
-    },
     title:{
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
@@ -40,6 +35,33 @@ export const teamGenStyles = makeStyles((theme: Theme) =>
           theme.palette.type === "light" ? "#f0f0f0" : "#303030"
         }`,
       },
+    },
+    grid: {
+      flexGrow: 1,
+    },
+    paper_right: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      marginLeft: "1rem",
+      marginRight: "5rem",
+    },
+    paper_left: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      marginLeft: "5rem",
+      marginRight: "1rem",
+    },
+    paper: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      marginLeft: "5rem",
+      marginRight: "5rem",
+    },
+    pageName: {
+      marginLeft: "5rem",
     },
   })
 );
