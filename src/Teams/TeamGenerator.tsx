@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { Player } from "../common/models/Player";
 import {
     Paper,
@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import { DataGrid, GridRowsProp, GridColDef, GridSelectionApi, GridSelectionModel } from '@material-ui/data-grid';
 import { teamGenStyles } from "./TeamGenStyles";
 import ReactDOM from "react-dom";
-
+import PlayerService from "../common/Services/PlayerService";
 function NumberList(props: any){
     const n = props.teams;
     const listItems = n.map((n:any) =>
@@ -25,26 +25,21 @@ function NumberList(props: any){
 
 const TeamGenerator = () => {
     const [pageSize, setPageSize] = React.useState<number>(10);
-    let players: Player[] = [
-        {id: 456, firstName: 'A', lastName: 'Lu' }, 
-        {id: 123, firstName: 'B', lastName: 'Franklin' },
-        {id: 273, firstName: 'C', lastName: 'Yang' },
-        {id: 1493, firstName: 'D', lastName: 'Franzo' },
-        {id: 81155, firstName: 'E', lastName: 'Szymanski' },
-        {id: 8132, firstName: 'F', lastName: 'Szymanski' },
-        {id: 842, firstName: 'G', lastName: 'Szymanski' },
-        {id: 812, firstName: 'H', lastName: 'Szymanski' },
-        {id: 862, firstName: 'J', lastName: 'Szymanski' },
-    ];
-    
+    const [allPlayers, setAllPlayers] = useState<Player[]>([]);
+    useEffect(() => {
+        PlayerService.getAllPlayers().then((players) => {
+            setAllPlayers(players);
+          });    
+    });
     const rows : GridRowsProp = [
-        ... players.map((player) => ({
+        ...allPlayers.map((player) => ({
           id: player.id, 
           playerId: player.id, 
           firstName: player.firstName, 
           lastName: player.lastName,
         }))
     ];
+
     const columns: GridColDef[] = [
         {
             field: "firstName",
@@ -64,19 +59,21 @@ const TeamGenerator = () => {
           },
     ];
 
-    let selectedPlayerIDs:any[] = [];
-    let playyyerrrz:any[] = [];
+    let selectedPlayers:any[] = [];
     let team1:string[] = [];
     let team2:string[] = [];
 
-    let num_players = players.length;
+    let num_players = allPlayers.length;
     const classes = teamGenStyles();
     function handleCheckbox(e:GridSelectionModel){
-        selectedPlayerIDs = e;
-        console.log(selectedPlayerIDs);
-        playyyerrrz = [];
+        selectedPlayers = [];
         for(let i = 0; i < e.length; i++){
-            
+            let decimal: any = e[i];
+            PlayerService.getPlayerById(decimal).then((players) => {
+                //console.log(players.firstName, players.lastName);
+                selectedPlayers.push(""+players.firstName + " " + players.lastName);
+                console.log(selectedPlayers);
+            });
         }
     }
 
@@ -86,35 +83,42 @@ const TeamGenerator = () => {
         if(num_players > 8){
             num_players = 8;
         }
-        while(players.length > num_players){
-            players.splice(Math.floor(Math.random()*players.length), 1);
+
+        if(num_players < 4){
+            num_players = -1;
         }
-        for (let i = 0; i < players.length; i++){
-            if(Math.random() < 0.5){
-                if(team1.length === Math.floor(num_players/2)){
-                    team2.push(players[i].firstName);
-                }else {
-                    team1.push(players[i].firstName);
-                }
-            } else {
-                if(team2.length === Math.floor(num_players/2)){
-                    team1.push(players[i].firstName);
-                }else {
-                    team2.push(players[i].firstName);
-                }
+        if(num_players === -1){
+            team1.push("No enough players");
+            team2.push("No enough players");
+        } else {
+            while(allPlayers.length > (2*Math.floor(num_players/2))){
+                allPlayers.splice(Math.floor(Math.random()*allPlayers.length), 1);
             }
-            ReactDOM.render(
-                <NumberList teams={team2} />,
-                document.getElementById('team2')
-            );
-            ReactDOM.render(
-                <NumberList teams={team1} />,
-                document.getElementById('team1')
-            );
+            for (let i = 0; i < allPlayers.length; i++){
+                if(Math.random() < 0.5){
+                    if(team1.length === Math.floor(num_players/2)){
+                        team2.push(allPlayers[i].firstName);
+                    }else {
+                        team1.push(allPlayers[i].firstName);
+                    }
+                } else {
+                    if(team2.length === Math.floor(num_players/2)){
+                        team1.push(allPlayers[i].firstName);
+                    }else {
+                        team2.push(allPlayers[i].firstName);
+                    }
+                } 
+            }
         }
-
+        ReactDOM.render(
+            <NumberList teams={team2} />,
+            document.getElementById('team2')
+        );
+        ReactDOM.render(
+            <NumberList teams={team1} />,
+            document.getElementById('team1')
+        );
     };
-
     return (
         <div>
             <Typography variant="h3" className={classes.pageName}>Generate a Team</Typography>

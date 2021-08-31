@@ -11,7 +11,7 @@ export const teamGenStyles = makeStyles((theme: Theme) =>
       marginLeft: "1rem",
       marginRight: "1rem",
       padding: "1rem",
-      width: "50%",
+      width: "95%",
     },
     root: {
       "& .super-app-theme--header": {
