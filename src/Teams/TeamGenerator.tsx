@@ -6,7 +6,6 @@ import {
   GridSelectionModel,
 } from "@material-ui/data-grid";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import { Player } from "../common/models/Player";
 import PlayerService from "../common/Services/PlayerService";
 import { teamGenStyles } from "./TeamGenStyles";
@@ -16,13 +15,23 @@ let num_players = 0;
 
 function NumberList(props: any) {
   const n = props.teams;
-  const listItems = n.map((n: any) => <li key={n.toString()}>{n}</li>);
-  return <ul> {listItems} </ul>;
+  const listItems = n.map((n: any) => (
+    <li key={n.toString()}>
+      <span>{n}</span>
+    </li>
+  ));
+  return (
+    <div style={{ width: "50%" }}>
+      <ul>{listItems}</ul>
+    </div>
+  );
 }
 
 const TeamGenerator = () => {
   const [pageSize, setPageSize] = React.useState<number>(10);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
+  const [team1, setTeam1] = useState<string[]>([]);
+  const [team2, setTeam2] = useState<string[]>([]);
 
   useEffect(() => {
     PlayerService.getAllPlayers().then((players) => {
@@ -57,8 +66,8 @@ const TeamGenerator = () => {
     },
   ];
 
-  let team1: string[] = [];
-  let team2: string[] = [];
+  let tempTeam1: string[] = [];
+  let tempTeam2: string[] = [];
 
   const classes = teamGenStyles();
   function handleCheckbox(e: GridSelectionModel) {
@@ -77,8 +86,8 @@ const TeamGenerator = () => {
   };
 
   const handleGenerate = () => {
-    team1 = [];
-    team2 = [];
+    tempTeam1 = [];
+    tempTeam2 = [];
 
     if (num_players > 8) {
       num_players = 8;
@@ -87,8 +96,8 @@ const TeamGenerator = () => {
       num_players = -1;
     }
     if (num_players === -1) {
-      team1.push("Not enough players");
-      team2.push("Not enough players");
+      tempTeam1.push("Not enough players");
+      tempTeam2.push("Not enough players");
     } else {
       for (let i = 0; i < allPlayers.length; i++) {
         if (!selectedPlayers.includes(allPlayers[i].id)) {
@@ -101,28 +110,22 @@ const TeamGenerator = () => {
       }
       for (let i = 0; i < allPlayers.length; i++) {
         if (Math.random() < 0.5) {
-          if (team1.length === Math.floor(num_players / 2)) {
-            team2.push(allPlayers[i].firstName);
+          if (tempTeam1.length === Math.floor(num_players / 2)) {
+            tempTeam2.push(allPlayers[i].firstName);
           } else {
-            team1.push(allPlayers[i].firstName);
+            tempTeam1.push(allPlayers[i].firstName);
           }
         } else {
-          if (team2.length === Math.floor(num_players / 2)) {
-            team1.push(allPlayers[i].firstName);
+          if (tempTeam2.length === Math.floor(num_players / 2)) {
+            tempTeam1.push(allPlayers[i].firstName);
           } else {
-            team2.push(allPlayers[i].firstName);
+            tempTeam2.push(allPlayers[i].firstName);
           }
         }
       }
     }
-    ReactDOM.render(
-      <NumberList teams={team2} />,
-      document.getElementById("team2")
-    );
-    ReactDOM.render(
-      <NumberList teams={team1} />,
-      document.getElementById("team1")
-    );
+    setTeam1(tempTeam1);
+    setTeam2(tempTeam2);
   };
   return (
     <div>
@@ -156,6 +159,7 @@ const TeamGenerator = () => {
               variant="contained"
               color="primary"
               onClick={handleGenerate}
+              disabled={num_players < 2}
             >
               Generate
             </Button>
@@ -172,11 +176,7 @@ const TeamGenerator = () => {
                   <Typography variant="h6" className={classes.title}>
                     Team 1
                   </Typography>
-                  <Typography
-                    variant="h6"
-                    id="team1"
-                    className={classes.title}
-                  ></Typography>
+                  <NumberList teams={team1} />
                 </Paper>
               </Grid>
               <Grid item xs={6}>
@@ -184,11 +184,7 @@ const TeamGenerator = () => {
                   <Typography variant="h6" className={classes.title}>
                     Team 2
                   </Typography>
-                  <Typography
-                    variant="h6"
-                    id="team2"
-                    className={classes.title}
-                  ></Typography>
+                  <NumberList teams={team2} />
                 </Paper>
               </Grid>
             </Grid>
