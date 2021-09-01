@@ -125,4 +125,16 @@ export default class OfficeRankService {
 
     return rankings;
   }
+
+  static async getAllPlayerRankings() {
+    const players = await PlayerService.getAllPlayers();
+    let officeRankins: OfficeRanking[] = [];
+    for (let player of players) {
+      if (player.id) {
+        const result = await OfficeRankService.getPlayerRanking(player.id);
+        officeRankins.push(result);
+      }
+    }
+    return officeRankins;
+  }
 }
