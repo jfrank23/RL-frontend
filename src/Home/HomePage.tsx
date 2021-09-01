@@ -2,7 +2,7 @@ import { Grid, Typography } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { useEffect, useState } from "react";
-import { Cell, Pie, PieChart } from "recharts";
+import { Cell, Pie, PieChart, Sector } from "recharts";
 import TeamTable from "../common/components/TeamsTable";
 import { Game } from "../common/models/Game";
 import { Player } from "../common/models/Player";
@@ -56,6 +56,7 @@ const Home = () => {
   const [stats, setStats] = useState<Stat[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [officeRankings, setOfficeRankings] = useState<OfficeRanking[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     GameService.getAllGames().then((games) => {
@@ -92,6 +93,68 @@ const Home = () => {
       setOfficeRankings(rankings)
     );
   }, [players, ranks, stats]);
+
+  const renderActiveShape = (props: any) => {
+    const RADIAN = Math.PI / 180;
+    const {
+      cx,
+      cy,
+      midAngle,
+      innerRadius,
+      outerRadius,
+      startAngle,
+      endAngle,
+      fill,
+      payload,
+      percent,
+      value,
+    } = props;
+    const sin = Math.sin(-RADIAN * midAngle);
+    const cos = Math.cos(-RADIAN * midAngle);
+    const sx = cx + (outerRadius + 10) * cos;
+    const sy = cy + (outerRadius + 10) * sin;
+    const mx = cx + (outerRadius + 30) * cos;
+    const my = cy + (outerRadius + 30) * sin;
+    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+    const ey = my;
+    const textAnchor = cos >= 0 ? "start" : "end";
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <g>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+        />
+        <text
+          x={x}
+          y={y}
+          fill="white"
+          textAnchor={x > cx ? "start" : "end"}
+          dominantBaseline="central"
+        >
+          {`${(percent * 100).toFixed(0)}%`}
+        </text>
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          textAnchor={textAnchor}
+          fill="#333"
+        >{`Wins: ${value}`}</text>
+      </g>
+    );
+  };
+
+  const onPieEnter = (_: any, index: number) => {
+    setActiveIndex(index);
+  };
 
   const playerIsInGame = (game: Game, playerId: number) => {
     const blueTeamId = game.blueTeam.team.map((player) => player.id);
@@ -336,15 +399,18 @@ const Home = () => {
           <Typography className={classes.sectionHeading} variant="h4">
             Wins Per Team Color
           </Typography>
-          <PieChart width={300} height={400}>
+          <PieChart width={500} height={500}>
             <Pie
               data={innerCircle}
-              cx={150}
-              cy={200}
-              innerRadius={80}
-              outerRadius={100}
+              cx="50%"
+              cy="50%"
+              innerRadius={100}
+              outerRadius={180}
+              activeIndex={activeIndex}
+              activeShape={renderActiveShape}
+              onMouseEnter={onPieEnter}
               fill="#8884d8"
-              paddingAngle={5}
+              paddingAngle={1}
               dataKey="value"
               label
             >
