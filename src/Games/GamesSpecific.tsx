@@ -299,13 +299,13 @@ const GameSpecific = () => {
           Goal Breakdown
         </Typography>
         <Grid container justifyContent="space-around" alignItems="center">
-          <PieChart width={400} height={400}>
+          <PieChart width={500} height={500}>
             <Pie
               data={innerCircle}
               dataKey="value"
               cx="50%"
               cy="50%"
-              outerRadius={60}
+              outerRadius={90}
               fill="#8884d8"
             >
               {innerCircle?.map((entry: any, index: number) => (
@@ -322,8 +322,8 @@ const GameSpecific = () => {
               cy="50%"
               activeIndex={activeIndex}
               activeShape={renderActiveShape}
-              innerRadius={70}
-              outerRadius={90}
+              innerRadius={100}
+              outerRadius={180}
               onMouseEnter={onPieEnter}
               fill="#82ca9d"
             >

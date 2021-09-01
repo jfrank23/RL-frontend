@@ -183,16 +183,20 @@ const PlayerSpecific = () => {
               <CardContent>
                 <Typography variant="h6">Office Ranking (Total)</Typography>
                 <Typography>
-                  <b>Goals Scored:</b> {officeRanking?.summary.total.goals}
+                  <b>Goals Scored:</b>{" "}
+                  {officeRanking?.summary.total.goals || "Loading"}
                 </Typography>
                 <Typography>
-                  <b>Assists:</b> {officeRanking?.summary.total.assists}
+                  <b>Assists:</b>{" "}
+                  {officeRanking?.summary.total.assists || "Loading"}
                 </Typography>
                 <Typography>
-                  <b>Shots:</b> {officeRanking?.summary.total.shots}
+                  <b>Shots:</b>{" "}
+                  {officeRanking?.summary.total.shots || "Loading"}
                 </Typography>
                 <Typography>
-                  <b>Saves:</b> {officeRanking?.summary.total.saves}
+                  <b>Saves:</b>{" "}
+                  {officeRanking?.summary.total.saves || "Loading"}
                 </Typography>
               </CardContent>
             </Card>
@@ -202,16 +206,20 @@ const PlayerSpecific = () => {
               <CardContent>
                 <Typography variant="h6">Office Ranking (Avg)</Typography>
                 <Typography>
-                  <b>Goals Scored:</b> {officeRanking?.summary.average.goals}
+                  <b>Goals Scored:</b>{" "}
+                  {officeRanking?.summary.average.goals || "Loading"}
                 </Typography>
                 <Typography>
-                  <b>Assists:</b> {officeRanking?.summary.average.assists}
+                  <b>Assists:</b>{" "}
+                  {officeRanking?.summary.average.assists || "Loading"}
                 </Typography>
                 <Typography>
-                  <b>Shots:</b> {officeRanking?.summary.average.shots}
+                  <b>Shots:</b>{" "}
+                  {officeRanking?.summary.average.shots || "Loading"}
                 </Typography>
                 <Typography>
-                  <b>Saves:</b> {officeRanking?.summary.average.saves}
+                  <b>Saves:</b>{" "}
+                  {officeRanking?.summary.average.saves || "Loading"}
                 </Typography>
               </CardContent>
             </Card>

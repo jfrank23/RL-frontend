@@ -41,7 +41,7 @@ const StatCard = ({ category, listItems }: StatCardInput) => {
           {listItems.map((item) => {
             return (
               <li>
-                {item.playerName} - {item.value}
+                {item.playerName} - {item.value.toFixed(1)}
               </li>
             );
           })}
