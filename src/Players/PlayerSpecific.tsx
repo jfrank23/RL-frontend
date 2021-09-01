@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Card,
   CardContent,
@@ -9,37 +8,27 @@ import {
   Paper,
   Theme,
   Typography,
-  withStyles,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
 } from "@material-ui/core";
-import { useHistory, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { CustomGameTable } from "../common/components/CustomGameTable";
-import "../Teams/TeamsPage.css";
-import * as moment from "moment";
-import SearchIcon from "@material-ui/icons/Search";
-import { Rank } from "../common/models/Rank";
-import { Player } from "../common/models/Player";
-import { Team } from "../common/models/Team";
+import TeamTable from "../common/components/TeamsTable";
 import { Game } from "../common/models/Game";
+import { Player } from "../common/models/Player";
+import { Rank } from "../common/models/Rank";
 import { Stat } from "../common/models/Stat";
 import { OfficeRanking, StatSummary } from "../common/models/StatSummary";
-import PlayerService from "../common/Services/PlayerService";
-import TeamService from "../common/Services/TeamService";
+import { Team } from "../common/models/Team";
 import GameService from "../common/Services/GameService";
 import OfficeRankService from "../common/Services/OfficeRankingService";
+import PlayerService from "../common/Services/PlayerService";
+import RankService from "../common/Services/RankService";
 import StatService from "../common/Services/StatService";
 import StatSummaryService from "../common/Services/StatSummaryService";
-import RankService from "../common/Services/RankService";
+import TeamService from "../common/Services/TeamService";
+import "../Teams/TeamsPage.css";
 
-const teamSpecificStyles = makeStyles((theme: Theme) =>
+const playerSpecificStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: "flex",
@@ -73,143 +62,10 @@ const teamSpecificStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const useRowStyles = makeStyles({
-  root: {
-    "& > *": {
-      borderBottom: "set",
-    },
-  },
-});
-const StyledHeader = withStyles((theme: Theme) =>
-  createStyles({
-    head: {
-      backgroundColor: theme.palette.primary.dark,
-      color: theme.palette.common.white,
-      borderRight: `1px solid ${
-        theme.palette.type === "light" ? "#f0f0f0" : "#303030"
-      }`,
-    },
-  })
-)(TableCell);
-
-const StyledCell = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      borderRight: `1px solid ${
-        theme.palette.type === "light" ? "#f0f0f0" : "#303030"
-      }`,
-    },
-  })
-)(TableCell);
-//------------------Teams Table---------------------------
-
-function TeamPlayers(team?: Team) {
-  const history = useHistory();
-
-  function refreshPage() {
-    window.location.reload();
-  }
-
-  return (
-    <React.Fragment>
-      {team?.team.map((player: any) => (
-        <div
-          onClick={() => {
-            history.push(`/PlayerSpecific/${player.id}`);
-            refreshPage();
-          }}
-          className="txtlink"
-        >
-          {player.firstName} {player.lastName}
-        </div>
-      ))}
-    </React.Fragment>
-  );
-}
-
-function TeamRow(props: { teamRow: any }) {
-  const teamRow = props.teamRow;
-  const history = useHistory();
-  const [team, setTeam] = useState<Team>();
-  const [recentMatch, setRecentMatch] = useState<Game>();
-  const classes = useRowStyles();
-  useEffect(() => {
-    TeamService.getTeamById(teamRow.teamId).then((team) => {
-      setTeam(team);
-    });
-    GameService.getGamesById(teamRow.gameId).then((match) => {
-      setRecentMatch(match);
-    });
-  }, []);
-  let date = moment
-    .default(recentMatch?.gameTime)
-    .format("MMM DD,YYYY hh:mm a");
-
-  return (
-    <React.Fragment>
-      <TableRow hover key={teamRow.teamId} className={classes.root}>
-        <StyledCell align="center" component="th" scope="row">
-          {teamRow.rank}
-        </StyledCell>
-        <StyledCell align="center">{TeamPlayers(team)}</StyledCell>
-        <StyledCell align="center">
-          <div
-            onClick={() => history.push(`/games/${recentMatch?.id}`)}
-            className="txtlink"
-          >
-            {date}
-          </div>
-        </StyledCell>
-        <TableCell align="center">
-          <IconButton
-            aria-label="team specific"
-            size="small"
-            onClick={() => history.push(`/teams/${teamRow.teamId}`)}
-          >
-            {<SearchIcon />}
-          </IconButton>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-}
-
-// game row
-export function Row(props: { row: any }) {
-  const { row } = props;
-  const classes = useRowStyles();
-  const history = useHistory();
-  let date = moment.default(row.gameTime).format("MMM DD,YYYY hh:mm a");
-
-  return (
-    <React.Fragment>
-      <TableRow hover key={row.teamId} className={classes.root}>
-        <StyledCell align="center" component="th" scope="row">
-          {date}
-        </StyledCell>
-        <StyledCell align="center">{TeamPlayers(row.blueTeam)}</StyledCell>
-        <StyledCell align="center">{TeamPlayers(row.redTeam)}</StyledCell>
-        <StyledCell align="center">{row.blueScore}</StyledCell>
-        <StyledCell align="center">{row.redScore}</StyledCell>
-        <TableCell align="center">
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => history.push(`/games/${row.id}`)}
-          >
-            {<SearchIcon />}
-          </IconButton>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-}
-
 //--------------Driver fucntion --------------------
 const PlayerSpecific = () => {
   const { id } = useParams() as any;
-  const history = useHistory();
-  const classes = teamSpecificStyles();
+  const classes = playerSpecificStyles();
   const [player, setPlayer] = useState<Player>();
   const [games, setGames] = useState<Game[]>([]);
   const [teams, setTeams] = useState<Team[]>();
@@ -217,19 +73,6 @@ const PlayerSpecific = () => {
   const [Ranks, setRanks] = useState<Rank[]>([]);
   const [statSummary, setStatSummary] = useState<StatSummary>();
   const [officeRanking, setOfficeRanking] = useState<OfficeRanking>();
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, Ranks.length - page * rowsPerPage);
-  const handleChangePage = (event: any, newPage: any) => {
-    setPage(newPage);
-  };
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   useEffect(() => {
     GameService.getGamesByPlayerId(id).then((games) => setGames(games));
@@ -265,22 +108,6 @@ const PlayerSpecific = () => {
       );
     }
   }, [games, stats]);
-
-  const headCells = [
-    { id: "rank", numberic: true, label: "ELO" },
-    { id: "teamPlayers", numberic: false, label: "Team Players" },
-    { id: "recentMatch", numberic: true, label: "Most Recent Match" },
-    { id: "details", numberic: false, label: "Details" },
-  ];
-
-  const gameHeadCells = [
-    { id: "date", numberic: true, label: "Date" },
-    { id: "blueTeam", numberic: false, label: "Blue Team" },
-    { id: "orangeTeam", numberic: false, label: "Orange Team" },
-    { id: "blueScore", numberic: true, label: "Blue Score" },
-    { id: "orangeScore", numberic: true, label: "Orange Score" },
-    { id: "stats", numberic: false, label: "Stats" },
-  ];
 
   return (
     <div>
@@ -394,90 +221,12 @@ const PlayerSpecific = () => {
         <Typography variant="h4" className={classes.sectionHeading}>
           Games Played
         </Typography>
-        <div style={{ height: "100%", width: "100%" }}>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={games.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-          <TableContainer component={Paper}>
-            <Table aria-label="games table">
-              <TableHead>
-                <TableRow key="header">
-                  {gameHeadCells.map((headCell) => (
-                    <StyledHeader align="center" key={headCell.id}>
-                      {headCell.label}
-                    </StyledHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(rowsPerPage > 0
-                  ? games.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : games
-                ).map((game: any) => (
-                  <Row key={game.id} row={game} />
-                ))}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
+        <CustomGameTable game={games}></CustomGameTable>
         <Divider className={classes.divider} />
         <Typography variant="h4" className={classes.sectionHeading}>
           Teams
         </Typography>
-        <div style={{ height: "100%", width: "100%" }}>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={Ranks.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-          <TableContainer component={Paper}>
-            <Table aria-label="collapsible table">
-              <TableHead>
-                <TableRow key="header">
-                  {headCells.map((headCell) => (
-                    <StyledHeader align="center" key={headCell.id}>
-                      {headCell.label}
-                    </StyledHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(rowsPerPage > 0
-                  ? Ranks.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : Ranks
-                ).map((rankTeam: any) => (
-                  <TeamRow key={rankTeam.teamId} teamRow={rankTeam} />
-                ))}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
+        <TeamTable Ranks={Ranks} />
       </Paper>
     </div>
   );
